@@ -2,8 +2,6 @@ package engine
 
 import (
 	"log"
-
-	"github.com/faiface/pixel"
 )
 
 const (
@@ -33,26 +31,13 @@ const (
 
 type Tile struct {
 	Id          int
-	name        string
-	displayName string
-	sprite      string
+	Name        string
+	DisplayName string
+	Sprite      string
 	Visible     bool
 }
 
 var tiles map[int]Tile
-var tilesBatch *pixel.Batch
-
-func ClearTilesBatch() {
-	tilesBatch.Clear()
-}
-
-func DrawTilesBatch(t pixel.Target) {
-	tilesBatch.Draw(t)
-}
-
-func (t Tile) Draw(matrix pixel.Matrix) {
-	tileSprites[t.sprite].Draw(tilesBatch, matrix)
-}
 
 func InitTiles() {
 	tiles = map[int]Tile{
@@ -79,8 +64,6 @@ func InitTiles() {
 		tileWaterTopRightSpeck:     {tileWaterTopRightSpeck, "waterTopRightSpeck", "water", "waterTopRightSpeck", true},
 		tileWaterTopLeftSpeck:      {tileWaterTopLeftSpeck, "waterTopLeftSpeck", "water", "waterTopLeftSpeck", true},
 	}
-
-	tilesBatch = pixel.NewBatch(&pixel.TrianglesData{}, GTileSpritesheet)
 
 	log.Println("Tiles initialized.")
 }

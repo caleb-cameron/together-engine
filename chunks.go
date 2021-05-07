@@ -81,8 +81,8 @@ func LoadChunk(x, y int) *Chunk {
 
 func (c *Chunk) GetChunkPos() pixel.Vec {
 	return pixel.Vec{
-		X: c.Bounds.Min.X / ChunkSize,
-		Y: c.Bounds.Min.Y / ChunkSize,
+		X: c.Bounds.Min.X / float64(ChunkSize),
+		Y: c.Bounds.Min.Y / float64(ChunkSize),
 	}
 }
 
@@ -393,22 +393,6 @@ func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTil
 	//	// Right now we only add water boundary Tiles.
 	//	return *thisTile
 	//}
-}
-
-func (c *Chunk) Draw(matrix pixel.Matrix) {
-	tileVec := pixel.Vec{} //pixel.Vec{X: 0 - (c.Bounds.W() / 2), Y: 0 - (c.Bounds.H() / 2)}
-
-	for _, col := range c.Tiles {
-		for _, tile := range col {
-			if tile.Visible {
-				// fmt.Printf("Drawing Tile at %+v\n", matrix.Moved(tileVec).String())
-				tile.Draw(matrix.Moved(tileVec))
-			}
-			tileVec.Y += TileSize
-		}
-		tileVec.X += TileSize
-		tileVec.Y = 0 // 0 - (c.Bounds.H() / 2)
-	}
 }
 
 func (c *Chunk) PersistToDisk() {

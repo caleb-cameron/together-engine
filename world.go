@@ -13,12 +13,12 @@ import (
 type World struct {
 	Chunks      map[int]map[int]*Chunk
 	Encoder     *Encoder
-	updateMutex *sync.RWMutex
+	UpdateMutex *sync.RWMutex
 }
 
 func (w *World) Init() {
 	w.Encoder = NewEncoder()
-	w.updateMutex = new(sync.RWMutex)
+	w.UpdateMutex = new(sync.RWMutex)
 
 	err := os.Mkdir(DataDir, 0700)
 
@@ -77,23 +77,23 @@ func (w *World) CreateChunk(x, y int) {
 		return
 	}
 
-	c := NewChunk(pixel.R(float64(x*ChunkSize), float64(y*ChunkSize), float64((x+1)*ChunkSize), float64(y+1)*ChunkSize))
+	c := NewChunk(pixel.R(float64(x*ChunkSize), float64(y*ChunkSize), float64((x+1)*ChunkSize), float64(y+1)*float64(ChunkSize)))
 	//fmt.Printf("Generated Chunk %+v at %d, %d.\n", c.GetChunkPos(), x, y)
 	c.Generate()
 	c.GenerateBoundaryTiles()
 	c.PersistToDisk()
 
-	w.updateMutex.Lock()
+	w.UpdateMutex.Lock()
 	if _, ok := w.Chunks[x]; !ok {
 		w.Chunks[x] = make(map[int]*Chunk, 10)
 	}
 	w.Chunks[x][y] = c
-	w.updateMutex.Unlock()
+	w.UpdateMutex.Unlock()
 }
 
 func (w *World) UpdateLoadedChunks() {
-	playerX := GPlayer.Position.X / ChunkSize / TileSize
-	playerY := GPlayer.Position.Y / ChunkSize / TileSize
+	playerX := GPlayer.Position.X / float64(ChunkSize) / float64(TileSize)
+	playerY := GPlayer.Position.Y / float64(ChunkSize) / float64(TileSize)
 
 	chunkLoadPadding := 2.0
 
@@ -117,7 +117,7 @@ func (w *World) LoadChunk(x, y int) {
 		w.Chunks[x] = make(map[int]*Chunk, 10)
 	}
 
-	w.updateMutex.Lock()
+	w.UpdateMutex.Lock()
 	if w.Chunks == nil {
 		w.Chunks = make(map[int]map[int]*Chunk, 10)
 	}
@@ -127,7 +127,7 @@ func (w *World) LoadChunk(x, y int) {
 	}
 
 	w.Chunks[x][y] = LoadChunk(x, y)
-	w.updateMutex.Unlock()
+	w.UpdateMutex.Unlock()
 }
 
 func (w *World) UnloadChunk(x, y int) {
@@ -141,9 +141,9 @@ func (w *World) UnloadChunk(x, y int) {
 		c.PersistToDisk()
 	}
 
-	w.updateMutex.Lock()
+	w.UpdateMutex.Lock()
 	delete(w.Chunks[x], y)
-	w.updateMutex.Unlock()
+	w.UpdateMutex.Unlock()
 }
 
 func (w *World) PreloadNeighborChunks(c *Chunk) {
@@ -186,19 +186,9 @@ func (w *World) GenerateBoundaryTiles() {
 	}
 }
 
-func (w *World) Draw() {
-	w.updateMutex.RLock()
-	for _, col := range w.Chunks {
-		for _, c := range col {
-			c.Draw(pixel.IM.Moved(pixel.Vec{X: c.Bounds.Min.X * TileSize, Y: c.Bounds.Min.Y * TileSize}))
-		}
-	}
-	w.updateMutex.RUnlock()
-}
-
 func (w *World) ChunkExists(x int, y int) bool {
-	w.updateMutex.RLock()
-	defer w.updateMutex.RUnlock()
+	w.UpdateMutex.RLock()
+	defer w.UpdateMutex.RUnlock()
 	if _, ok := w.Chunks[x]; !ok {
 		return false
 	}
@@ -207,8 +197,8 @@ func (w *World) ChunkExists(x int, y int) bool {
 }
 
 func (w *World) GetChunk(x, y int) *Chunk {
-	w.updateMutex.RLock()
-	defer w.updateMutex.RUnlock()
+	w.UpdateMutex.RLock()
+	defer w.UpdateMutex.RUnlock()
 
 	if _, ok := w.Chunks[x]; !ok {
 		return nil
