@@ -1,8 +1,9 @@
 package engine
 
 import (
-	"github.com/faiface/pixel"
 	"log"
+
+	"github.com/faiface/pixel"
 )
 
 const (
@@ -34,7 +35,7 @@ type Tile struct {
 	Id          int
 	name        string
 	displayName string
-	sprite      *pixel.Sprite
+	sprite      string
 	Visible     bool
 }
 
@@ -50,33 +51,33 @@ func DrawTilesBatch(t pixel.Target) {
 }
 
 func (t Tile) Draw(matrix pixel.Matrix) {
-	t.sprite.Draw(tilesBatch, matrix)
+	tileSprites[t.sprite].Draw(tilesBatch, matrix)
 }
 
 func InitTiles() {
 	tiles = map[int]Tile{
-		tileGrass:                  {tileGrass, "grass", "grass", tileSprites["grass"], true},
-		tileGrassTopLeftCorner:     {tileGrassTopLeftCorner, "grassTopLeftCorner", "grass", tileSprites["grassTopLeftCorner"], true},
-		tileGrassTopRightCorner:    {tileGrassTopRightCorner, "grassTopRightCorner", "grass", tileSprites["grassTopRightCorner"], true},
-		tileGrassBottomLeftCorner:  {tileGrassBottomLeftCorner, "grassBottomLeftCorner", "grass", tileSprites["grassBottomLeftCorner"], true},
-		tileGrassBottomRightCorner: {tileGrassBottomRightCorner, "grassBottomRightCorner", "grass", tileSprites["grassBottomRightCorner"], true},
-		tileGrassTopSide:           {tileGrassTopSide, "grassTopSide", "grass", tileSprites["grassTopSide"], true},
-		tileGrassBottomSide:        {tileGrassBottomSide, "grassBottomSide", "grass", tileSprites["grassBottomSide"], true},
-		tileGrassLeftSide:          {tileGrassLeftSide, "grassLeftSide", "grass", tileSprites["grassLeftSide"], true},
-		tileGrassRightSide:         {tileGrassRightSide, "grassRightSide", "grass", tileSprites["grassRightSide"], true},
-		tileWater:                  {tileWater, "water", "water", tileSprites["water"], true},
-		tileWaterTopLeftCorner:     {tileWaterTopLeftCorner, "waterTopLeftCorner", "water", tileSprites["waterTopLeftCorner"], true},
-		tileWaterTopRightCorner:    {tileWaterTopRightCorner, "waterTopRightCorner", "water", tileSprites["waterTopRightCorner"], true},
-		tileWaterBottomLeftCorner:  {tileWaterBottomLeftCorner, "waterBottomLeftCorner", "water", tileSprites["waterBottomLeftCorner"], true},
-		tileWaterBottomRightCorner: {tileWaterBottomRightCorner, "waterBottomRightCorner", "water", tileSprites["waterBottomRightCorner"], true},
-		tileWaterTopSide:           {tileWaterTopSide, "waterTopSide", "water", tileSprites["waterTopSide"], true},
-		tileWaterBottomSide:        {tileWaterBottomSide, "waterBottomSide", "water", tileSprites["waterBottomSide"], true},
-		tileWaterLeftSide:          {tileWaterLeftSide, "waterLeftSide", "water", tileSprites["waterLeftSide"], true},
-		tileWaterRightSide:         {tileWaterRightSide, "waterRightSide", "water", tileSprites["waterRightSide"], true},
-		tileWaterBottomRightSpeck:  {tileWaterBottomRightSpeck, "waterBottomRightSpeck", "water", tileSprites["waterBottomRightSpeck"], true},
-		tileWaterBottomLeftSpeck:   {tileWaterBottomLeftSpeck, "waterBottomLeftSpeck", "water", tileSprites["waterBottomLeftSpeck"], true},
-		tileWaterTopRightSpeck:     {tileWaterTopRightSpeck, "waterTopRightSpeck", "water", tileSprites["waterTopRightSpeck"], true},
-		tileWaterTopLeftSpeck:      {tileWaterTopLeftSpeck, "waterTopLeftSpeck", "water", tileSprites["waterTopLeftSpeck"], true},
+		tileGrass:                  {tileGrass, "grass", "grass", "grass", true},
+		tileGrassTopLeftCorner:     {tileGrassTopLeftCorner, "grassTopLeftCorner", "grass", "grassTopLeftCorner", true},
+		tileGrassTopRightCorner:    {tileGrassTopRightCorner, "grassTopRightCorner", "grass", "grassTopRightCorner", true},
+		tileGrassBottomLeftCorner:  {tileGrassBottomLeftCorner, "grassBottomLeftCorner", "grass", "grassBottomLeftCorner", true},
+		tileGrassBottomRightCorner: {tileGrassBottomRightCorner, "grassBottomRightCorner", "grass", "grassBottomRightCorner", true},
+		tileGrassTopSide:           {tileGrassTopSide, "grassTopSide", "grass", "grassTopSide", true},
+		tileGrassBottomSide:        {tileGrassBottomSide, "grassBottomSide", "grass", "grassBottomSide", true},
+		tileGrassLeftSide:          {tileGrassLeftSide, "grassLeftSide", "grass", "grassLeftSide", true},
+		tileGrassRightSide:         {tileGrassRightSide, "grassRightSide", "grass", "grassRightSide", true},
+		tileWater:                  {tileWater, "water", "water", "water", true},
+		tileWaterTopLeftCorner:     {tileWaterTopLeftCorner, "waterTopLeftCorner", "water", "waterTopLeftCorner", true},
+		tileWaterTopRightCorner:    {tileWaterTopRightCorner, "waterTopRightCorner", "water", "waterTopRightCorner", true},
+		tileWaterBottomLeftCorner:  {tileWaterBottomLeftCorner, "waterBottomLeftCorner", "water", "waterBottomLeftCorner", true},
+		tileWaterBottomRightCorner: {tileWaterBottomRightCorner, "waterBottomRightCorner", "water", "waterBottomRightCorner", true},
+		tileWaterTopSide:           {tileWaterTopSide, "waterTopSide", "water", "waterTopSide", true},
+		tileWaterBottomSide:        {tileWaterBottomSide, "waterBottomSide", "water", "waterBottomSide", true},
+		tileWaterLeftSide:          {tileWaterLeftSide, "waterLeftSide", "water", "waterLeftSide", true},
+		tileWaterRightSide:         {tileWaterRightSide, "waterRightSide", "water", "waterRightSide", true},
+		tileWaterBottomRightSpeck:  {tileWaterBottomRightSpeck, "waterBottomRightSpeck", "water", "waterBottomRightSpeck", true},
+		tileWaterBottomLeftSpeck:   {tileWaterBottomLeftSpeck, "waterBottomLeftSpeck", "water", "waterBottomLeftSpeck", true},
+		tileWaterTopRightSpeck:     {tileWaterTopRightSpeck, "waterTopRightSpeck", "water", "waterTopRightSpeck", true},
+		tileWaterTopLeftSpeck:      {tileWaterTopLeftSpeck, "waterTopLeftSpeck", "water", "waterTopLeftSpeck", true},
 	}
 
 	tilesBatch = pixel.NewBatch(&pixel.TrianglesData{}, GTileSpritesheet)

@@ -1,8 +1,6 @@
 package engine
 
 import (
-	"github.com/faiface/pixel"
-	"image"
 	"os"
 )
 
@@ -24,21 +22,6 @@ func unique(intSlice []int) []int {
 		}
 	}
 	return list
-}
-
-func loadPicture(path string) (pixel.Picture, error) {
-	file, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	img, _, err := image.Decode(file)
-	if err != nil {
-		return nil, err
-	}
-
-	return pixel.PictureDataFromImage(img), nil
 }
 
 func fileExists(path string) bool {
