@@ -10,10 +10,10 @@ type Player struct {
 	Velocity     pixel.Vec
 	Speed        float64
 	Acceleration float64
-	Sprite       *pixel.Sprite
+	Sprite       string
 }
 
-func NewPlayer(position pixel.Vec, speed float64, acceleration float64, sprite *pixel.Sprite) *Player {
+func NewPlayer(position pixel.Vec, speed float64, acceleration float64, sprite string) *Player {
 	return &Player{
 		Position:     position,
 		Velocity:     pixel.Vec{},
@@ -25,10 +25,6 @@ func NewPlayer(position pixel.Vec, speed float64, acceleration float64, sprite *
 
 func (p *Player) GetPosition() pixel.Vec {
 	return p.Position
-}
-
-func (p *Player) Draw(target *pixelgl.Window) {
-	p.Sprite.Draw(target, pixel.IM.Moved(p.Position))
 }
 
 func (p *Player) Update(dt float64, window *pixelgl.Window) {
