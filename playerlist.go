@@ -56,6 +56,17 @@ func (p *playerList) UpdatePlayer(username string, player *Player) error {
 	return nil
 }
 
+func (p *playerList) GetPlayer(username string) *Player {
+	p.mutex.RLock()
+	defer p.mutex.RUnlock()
+
+	if _, ok := p.players[username]; !ok {
+		return nil
+	}
+
+	return p.players[username]
+}
+
 /*
 	Returns true if the player was removed,
 	Returns false if the player was not in the list.
