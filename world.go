@@ -92,20 +92,42 @@ func (w *World) CreateChunk(x, y int) {
 }
 
 func (w *World) UpdateLoadedChunks() {
-	playerX := GPlayer.Position.X / float64(ChunkSize) / float64(TileSize)
-	playerY := GPlayer.Position.Y / float64(ChunkSize) / float64(TileSize)
+	players := PlayerList.GetPlayers()
 
 	chunkLoadPadding := 2.0
 
-	loadRect := pixel.R(playerX-ChunkLoadRadius-chunkLoadPadding, playerY-ChunkLoadRadius-chunkLoadPadding, playerX+ChunkLoadRadius+chunkLoadPadding, playerY+ChunkLoadRadius+chunkLoadPadding)
+	keepList := []pixel.Vec{}
+	w.UpdateMutex.RLock()
 
-	for x, col := range w.Chunks {
-		for y, _ := range col {
-			if !loadRect.Contains(pixel.V(float64(x), float64(y))) {
-				delete(w.Chunks[x], y)
+	for _, player := range players {
+		playerX := player.GetPosition().X / float64(ChunkSize) / float64(TileSize)
+		playerY := player.GetPosition().Y / float64(ChunkSize) / float64(TileSize)
+
+		loadRect := pixel.R(playerX-ChunkLoadRadius-chunkLoadPadding, playerY-ChunkLoadRadius-chunkLoadPadding, playerX+ChunkLoadRadius+chunkLoadPadding, playerY+ChunkLoadRadius+chunkLoadPadding)
+
+		for x, col := range w.Chunks {
+			for y, _ := range col {
+				chunkPos := pixel.V(float64(x), float64(y))
+				if loadRect.Contains(chunkPos) {
+					keepList = append(keepList, chunkPos)
+				}
 			}
 		}
+	}
 
+	w.UpdateMutex.RUnlock()
+	w.pruneChunks(keepList)
+}
+
+func (w *World) pruneChunks(keepList []pixel.Vec) {
+	w.UpdateMutex.Lock()
+	defer w.UpdateMutex.Unlock()
+
+	for _, v := range keepList {
+		x := int(v.X)
+		y := int(v.Y)
+
+		delete(w.Chunks[x], y)
 		if len(w.Chunks[x]) == 0 {
 			delete(w.Chunks, x)
 		}

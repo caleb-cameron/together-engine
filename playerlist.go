@@ -81,7 +81,7 @@ func (p *playerList) clearRecents() {
 	p.recentDisconnections = []string{}
 }
 
-func (p *playerList) GetPlayers() map[string]*engine.Player {
+func (p *playerList) GetPlayers() map[string]*Player {
 	p.mutex.RLock()
 	defer p.mutex.RUnlock()
 
