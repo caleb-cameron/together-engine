@@ -116,7 +116,6 @@ func (w *World) UpdateLoadedChunks() {
 	}
 
 	w.UpdateMutex.RUnlock()
-	log.Printf("%+v", keepList)
 	w.pruneChunks(keepList)
 }
 
