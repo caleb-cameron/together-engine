@@ -3,6 +3,8 @@ option go_package = "pb/";
 
 package pb;
 
+message Ack {}
+
 message ConnectRequest {
   string Username = 1;
 }
@@ -35,4 +37,5 @@ message GameState {
 
 service GameService {
   rpc Connect(ConnectRequest) returns (stream GameState);
+  rpc SendPlayerUpdates(stream PlayerEvent) returns (Ack);
 }

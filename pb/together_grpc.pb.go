@@ -19,6 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameServiceClient interface {
 	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (GameService_ConnectClient, error)
+	SendPlayerUpdates(ctx context.Context, opts ...grpc.CallOption) (GameService_SendPlayerUpdatesClient, error)
 }
 
 type gameServiceClient struct {
@@ -61,11 +62,46 @@ func (x *gameServiceConnectClient) Recv() (*GameState, error) {
 	return m, nil
 }
 
+func (c *gameServiceClient) SendPlayerUpdates(ctx context.Context, opts ...grpc.CallOption) (GameService_SendPlayerUpdatesClient, error) {
+	stream, err := c.cc.NewStream(ctx, &GameService_ServiceDesc.Streams[1], "/pb.GameService/SendPlayerUpdates", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &gameServiceSendPlayerUpdatesClient{stream}
+	return x, nil
+}
+
+type GameService_SendPlayerUpdatesClient interface {
+	Send(*PlayerEvent) error
+	CloseAndRecv() (*Ack, error)
+	grpc.ClientStream
+}
+
+type gameServiceSendPlayerUpdatesClient struct {
+	grpc.ClientStream
+}
+
+func (x *gameServiceSendPlayerUpdatesClient) Send(m *PlayerEvent) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *gameServiceSendPlayerUpdatesClient) CloseAndRecv() (*Ack, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(Ack)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GameServiceServer is the server API for GameService service.
 // All implementations must embed UnimplementedGameServiceServer
 // for forward compatibility
 type GameServiceServer interface {
 	Connect(*ConnectRequest, GameService_ConnectServer) error
+	SendPlayerUpdates(GameService_SendPlayerUpdatesServer) error
 	mustEmbedUnimplementedGameServiceServer()
 }
 
@@ -75,6 +111,9 @@ type UnimplementedGameServiceServer struct {
 
 func (UnimplementedGameServiceServer) Connect(*ConnectRequest, GameService_ConnectServer) error {
 	return status.Errorf(codes.Unimplemented, "method Connect not implemented")
+}
+func (UnimplementedGameServiceServer) SendPlayerUpdates(GameService_SendPlayerUpdatesServer) error {
+	return status.Errorf(codes.Unimplemented, "method SendPlayerUpdates not implemented")
 }
 func (UnimplementedGameServiceServer) mustEmbedUnimplementedGameServiceServer() {}
 
@@ -110,6 +149,32 @@ func (x *gameServiceConnectServer) Send(m *GameState) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _GameService_SendPlayerUpdates_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GameServiceServer).SendPlayerUpdates(&gameServiceSendPlayerUpdatesServer{stream})
+}
+
+type GameService_SendPlayerUpdatesServer interface {
+	SendAndClose(*Ack) error
+	Recv() (*PlayerEvent, error)
+	grpc.ServerStream
+}
+
+type gameServiceSendPlayerUpdatesServer struct {
+	grpc.ServerStream
+}
+
+func (x *gameServiceSendPlayerUpdatesServer) SendAndClose(m *Ack) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *gameServiceSendPlayerUpdatesServer) Recv() (*PlayerEvent, error) {
+	m := new(PlayerEvent)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // GameService_ServiceDesc is the grpc.ServiceDesc for GameService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -122,6 +187,11 @@ var GameService_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "Connect",
 			Handler:       _GameService_Connect_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "SendPlayerUpdates",
+			Handler:       _GameService_SendPlayerUpdates_Handler,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "together.proto",
