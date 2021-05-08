@@ -12,6 +12,7 @@ func init() {
 }
 
 type Player struct {
+	Username     string
 	Position     pixel.Vec
 	Velocity     pixel.Vec
 	Speed        float64
@@ -20,8 +21,9 @@ type Player struct {
 	mutex        sync.RWMutex
 }
 
-func NewPlayer(position pixel.Vec, speed float64, acceleration float64, sprite string) *Player {
+func NewPlayer(username string, position pixel.Vec, speed float64, acceleration float64, sprite string) *Player {
 	return &Player{
+		Username:     username,
 		Position:     position,
 		Velocity:     pixel.Vec{},
 		Speed:        speed,
