@@ -80,6 +80,9 @@ func LoadChunk(x, y int) *Chunk {
 }
 
 func (c *Chunk) GetChunkPos() pixel.Vec {
+	if c == nil {
+		return nil
+	}
 	return pixel.Vec{
 		X: c.Bounds.Min.X / float64(ChunkSize),
 		Y: c.Bounds.Min.Y / float64(ChunkSize),
@@ -87,6 +90,10 @@ func (c *Chunk) GetChunkPos() pixel.Vec {
 }
 
 func (c *Chunk) GetNeighborChunkPositions() []pixel.Vec {
+	if c == nil {
+		return nil
+	}
+
 	pos := c.GetChunkPos()
 	return []pixel.Vec{
 		{pos.X, pos.Y + 1},

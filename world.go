@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"strconv"
 	"sync"
@@ -169,6 +170,10 @@ func (w *World) UnloadChunk(x, y int) {
 }
 
 func (w *World) PreloadNeighborChunks(c *Chunk) {
+	if c == nil {
+		log.Println("Tried to preload neighbors of nil chunk.")
+		return
+	}
 	neighbors := c.GetNeighborChunkPositions()
 	for _, pos := range neighbors {
 		x := int(pos.X)
