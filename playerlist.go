@@ -3,8 +3,6 @@ package engine
 import (
 	"fmt"
 	"sync"
-
-	"github.com/faiface/pixel"
 )
 
 var PlayerList *playerList
@@ -13,6 +11,7 @@ type playerList struct {
 	players              map[string]*Player
 	recentConnections    []string
 	recentDisconnections []string
+	recentUpdates        []string
 	mutex                sync.RWMutex
 }
 
@@ -23,7 +22,7 @@ func newPlayerList() *playerList {
 	}
 }
 
-func (p *playerList) AddPlayer(username string) error {
+func (p *playerList) AddPlayer(username string, player *Player) error {
 	p.mutex.RLock()
 	if _, ok := p.players[username]; ok {
 		p.mutex.RUnlock()
@@ -34,7 +33,24 @@ func (p *playerList) AddPlayer(username string) error {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 
-	p.players[username] = NewPlayer(pixel.Vec{}, PlayerSpeed, PlayerAcceleration, DefaultCharacterSprite)
+	p.players[username] = player
+	p.recentConnections = append(p.recentConnections, username)
+
+	return nil
+}
+
+func (p *playerList) UpdatePlayer(username string, player *Player) error {
+	p.mutex.RLock()
+	if _, ok := p.players[username]; !ok {
+		p.mutex.RUnlock()
+		return fmt.Errorf("tried to update user that does not exist.")
+	}
+	p.mutex.RUnlock()
+
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
+
+	p.players[username] = player
 	p.recentConnections = append(p.recentConnections, username)
 
 	return nil
@@ -61,16 +77,17 @@ func (p *playerList) RemovePlayer(username string) bool {
 	return true
 }
 
-func (p *playerList) GetRecents() (*[]string, *[]string) {
+func (p *playerList) GetRecents() (*[]string, *[]string, *[]string) {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 
 	connects := p.recentConnections
 	disconnects := p.recentDisconnections
+	updates := p.recentUpdates
 
 	p.clearRecents()
 
-	return &connects, &disconnects
+	return &connects, &disconnects, &updates
 }
 
 /*
@@ -79,6 +96,7 @@ func (p *playerList) GetRecents() (*[]string, *[]string) {
 func (p *playerList) clearRecents() {
 	p.recentConnections = []string{}
 	p.recentDisconnections = []string{}
+	p.recentUpdates = []string{}
 }
 
 func (p *playerList) GetPlayers() map[string]*Player {
