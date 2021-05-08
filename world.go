@@ -70,7 +70,6 @@ func (w *World) CreateChunkAtPos(pos pixel.Vec) {
 }
 
 func (w *World) CreateChunk(x, y int) {
-
 	if w.ChunkExists(x, y) {
 		return
 	} else if ChunkCanBeLoaded(x, y) {
@@ -117,6 +116,7 @@ func (w *World) UpdateLoadedChunks() {
 	}
 
 	w.UpdateMutex.RUnlock()
+	log.Printf("%+v", keepList)
 	w.pruneChunks(keepList)
 }
 
