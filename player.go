@@ -7,6 +7,10 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 )
 
+func init() {
+	PlayerList = newPlayerList()
+}
+
 type Player struct {
 	Position     pixel.Vec
 	Velocity     pixel.Vec
