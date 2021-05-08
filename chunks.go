@@ -3,6 +3,7 @@ package engine
 import (
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 
 	perlin "github.com/aquilax/go-perlin"
@@ -81,7 +82,8 @@ func LoadChunk(x, y int) *Chunk {
 
 func (c *Chunk) GetChunkPos() pixel.Vec {
 	if c == nil {
-		return nil
+		log.Println("Attempt to call GetChunkPos on nil chunk")
+		return pixel.Vec{}
 	}
 	return pixel.Vec{
 		X: c.Bounds.Min.X / float64(ChunkSize),
