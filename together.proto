@@ -1,0 +1,38 @@
+syntax = "proto3";
+option go_package = "pb/";
+
+package pb;
+
+message ConnectRequest {
+  string Username = 1;
+}
+
+message Vector {
+  float X = 1;
+  float Y = 2;
+}
+
+message PlayerPosition {
+  Vector Position = 1;
+  Vector Velocity = 2;
+}
+
+message PlayerEvent {
+  enum EventType {
+    CONNECT = 0;
+    DISCONNECT = 1;
+    UPDATE = 2;
+  }
+
+  EventType Type = 1;
+  string Username = 2;
+  PlayerPosition Position  = 3;
+}
+
+message GameState {
+  repeated PlayerEvent Players = 1;
+}
+
+service GameService {
+  rpc Connect(ConnectRequest) returns (stream GameState);
+}
