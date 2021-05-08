@@ -4,7 +4,6 @@ import (
 	"sync"
 
 	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/pixelgl"
 )
 
 func init() {
@@ -29,6 +28,7 @@ func NewPlayer(username string, position pixel.Vec, speed float64, acceleration 
 		Speed:        speed,
 		Acceleration: acceleration,
 		Sprite:       sprite,
+		mutex:        sync.RWMutex{},
 	}
 }
 
@@ -44,45 +44,18 @@ func (p *Player) GetVelocity() pixel.Vec {
 	return p.Velocity
 }
 
-func (p *Player) Update(dt float64, window *pixelgl.Window) {
-	if window.Pressed(pixelgl.KeyLeft) || window.Pressed(pixelgl.KeyA) {
-		if p.Velocity.X-p.Acceleration*dt < (p.Speed * -1) {
-			p.Velocity.X = p.Speed * -1
-		} else {
-			p.Velocity.X -= p.Acceleration * dt
-		}
-	}
-
-	if window.Pressed(pixelgl.KeyRight) || window.Pressed(pixelgl.KeyD) {
-		if p.Velocity.X+p.Acceleration*dt > p.Speed {
-			p.Velocity.X = p.Speed
-		} else {
-			p.Velocity.X += p.Acceleration * dt
-		}
-	}
-
-	if window.Pressed(pixelgl.KeyUp) || window.Pressed(pixelgl.KeyW) {
-		if p.Velocity.Y+p.Acceleration*dt > p.Speed {
-			p.Velocity.Y = p.Speed
-		} else {
-			p.Velocity.Y += p.Acceleration * dt
-		}
-	}
-
-	if window.Pressed(pixelgl.KeyDown) || window.Pressed(pixelgl.KeyS) {
-		if p.Velocity.Y-p.Acceleration*dt < (p.Speed * -1) {
-			p.Velocity.Y = p.Speed * -1
-		} else {
-			p.Velocity.Y -= p.Acceleration * dt
-		}
-	}
+func (p *Player) Update(dt float64) {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
 
 	p.Position.X += p.Velocity.X
 	p.Position.Y += p.Velocity.Y
-
 }
 
 func (p *Player) ApplyFriction(dt float64, groundFriction float64) {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
+
 	if p.Velocity.X < 0 {
 		// Player is moving left
 		if p.Velocity.X > groundFriction*dt*-1 {

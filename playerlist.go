@@ -2,7 +2,10 @@ package engine
 
 import (
 	"fmt"
+	"log"
 	"sync"
+
+	"github.com/faiface/pixel"
 )
 
 var PlayerList *playerList
@@ -115,4 +118,25 @@ func (p *playerList) GetPlayers() map[string]*Player {
 	defer p.mutex.RUnlock()
 
 	return p.players
+}
+
+func (p *playerList) UpdatePlayerVelocity(username string, vel pixel.Vec) {
+	p.mutex.Lock()
+	defer p.mutex.Unlock()
+
+	if _, ok := p.players[username]; !ok {
+		log.Printf("Could not update player %s velocity: player not found.\n", username)
+		return
+	}
+
+	p.players[username].Velocity = vel
+
+}
+
+func (p *playerList) UpdatePlayers(dt float64, groundFriction float64) {
+	players := p.GetPlayers()
+	for _, p := range players {
+		p.ApplyFriction(dt, groundFriction)
+		p.Update(dt)
+	}
 }
