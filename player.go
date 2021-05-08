@@ -17,7 +17,7 @@ type Player struct {
 	Speed        float64
 	Acceleration float64
 	Sprite       string
-	mutex        sync.RWMutex
+	Mutex        sync.RWMutex
 }
 
 func NewPlayer(username string, position pixel.Vec, speed float64, acceleration float64, sprite string) *Player {
@@ -28,33 +28,33 @@ func NewPlayer(username string, position pixel.Vec, speed float64, acceleration 
 		Speed:        speed,
 		Acceleration: acceleration,
 		Sprite:       sprite,
-		mutex:        sync.RWMutex{},
+		Mutex:        sync.RWMutex{},
 	}
 }
 
 func (p *Player) GetPosition() pixel.Vec {
-	p.mutex.RLock()
-	defer p.mutex.RUnlock()
+	p.Mutex.RLock()
+	defer p.Mutex.RUnlock()
 	return p.Position
 }
 
 func (p *Player) GetVelocity() pixel.Vec {
-	p.mutex.RLock()
-	defer p.mutex.RUnlock()
+	p.Mutex.RLock()
+	defer p.Mutex.RUnlock()
 	return p.Velocity
 }
 
 func (p *Player) Update(dt float64) {
-	p.mutex.Lock()
-	defer p.mutex.Unlock()
+	p.Mutex.Lock()
+	defer p.Mutex.Unlock()
 
 	p.Position.X += p.Velocity.X
 	p.Position.Y += p.Velocity.Y
 }
 
 func (p *Player) ApplyFriction(dt float64, groundFriction float64) {
-	p.mutex.Lock()
-	defer p.mutex.Unlock()
+	p.Mutex.Lock()
+	defer p.Mutex.Unlock()
 
 	if p.Velocity.X < 0 {
 		// Player is moving left

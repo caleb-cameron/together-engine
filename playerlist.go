@@ -53,6 +53,10 @@ func (p *playerList) UpdatePlayer(username string, player *Player) error {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 
+	// We never actually release this lock, because we immediately replace the player.
+	// We only lock it to block reads first.
+	p.players[username].Mutex.Lock()
+
 	p.players[username] = player
 	p.recentConnections = append(p.recentConnections, username)
 
@@ -84,6 +88,10 @@ func (p *playerList) RemovePlayer(username string) bool {
 	p.mutex.RUnlock()
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
+
+	// We never actually release this lock, because we immediately replace the player.
+	// We only lock it to block reads first.
+	p.players[username].Mutex.Lock()
 
 	delete(p.players, username)
 	p.recentDisconnections = append(p.recentDisconnections, username)
