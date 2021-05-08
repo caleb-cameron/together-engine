@@ -1,6 +1,8 @@
 package engine
 
 import (
+	"sync"
+
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 )
@@ -11,6 +13,7 @@ type Player struct {
 	Speed        float64
 	Acceleration float64
 	Sprite       string
+	mutex        sync.RWMutex
 }
 
 func NewPlayer(position pixel.Vec, speed float64, acceleration float64, sprite string) *Player {
@@ -24,7 +27,15 @@ func NewPlayer(position pixel.Vec, speed float64, acceleration float64, sprite s
 }
 
 func (p *Player) GetPosition() pixel.Vec {
+	p.mutex.RLock()
+	defer p.mutex.RUnlock()
 	return p.Position
+}
+
+func (p *Player) GetVelocity() pixel.Vec {
+	p.mutex.RLock()
+	defer p.mutex.RUnlock()
+	return p.Velocity
 }
 
 func (p *Player) Update(dt float64, window *pixelgl.Window) {
