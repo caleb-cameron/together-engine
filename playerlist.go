@@ -46,7 +46,7 @@ func (p *playerList) UpdatePlayer(username string, player *Player) error {
 	p.mutex.RLock()
 	if _, ok := p.players[username]; !ok {
 		p.mutex.RUnlock()
-		return fmt.Errorf("tried to update user that does not exist.")
+		return fmt.Errorf("tried to update player that does not exist.")
 	}
 	p.mutex.RUnlock()
 
@@ -68,6 +68,7 @@ func (p *playerList) GetPlayer(username string) *Player {
 	defer p.mutex.RUnlock()
 
 	if _, ok := p.players[username]; !ok {
+		fmt.Printf("PlayerList.GetPlayer returned nil for player %s\n", username)
 		return nil
 	}
 
