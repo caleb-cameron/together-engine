@@ -24,6 +24,7 @@ message PlayerEvent {
     CONNECT = 0;
     DISCONNECT = 1;
     UPDATE = 2;
+    PING = 3;
   }
 
   EventType Type = 1;
