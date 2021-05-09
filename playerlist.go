@@ -58,7 +58,7 @@ func (p *playerList) UpdatePlayer(username string, player *Player) error {
 	p.players[username].Mutex.Lock()
 
 	p.players[username] = player
-	p.recentConnections = append(p.recentConnections, username)
+	p.recentUpdates = append(p.recentUpdates, username)
 
 	return nil
 }
