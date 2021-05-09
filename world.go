@@ -106,7 +106,7 @@ func (w *World) UpdateLoadedChunks() {
 		loadRect := pixel.R(playerX-ChunkLoadRadius-chunkLoadPadding, playerY-ChunkLoadRadius-chunkLoadPadding, playerX+ChunkLoadRadius+chunkLoadPadding, playerY+ChunkLoadRadius+chunkLoadPadding)
 
 		for x, col := range w.Chunks {
-			for y, _ := range col {
+			for y := range col {
 				chunkPos := pixel.V(float64(x), float64(y))
 				if loadRect.Contains(chunkPos) {
 					keepList = append(keepList, chunkPos)
@@ -119,12 +119,23 @@ func (w *World) UpdateLoadedChunks() {
 	w.pruneChunks(keepList)
 }
 
+func (w *World) InsertChunk(x int, y int, c *Chunk) {
+	w.UpdateMutex.Lock()
+	defer w.UpdateMutex.Unlock()
+
+	if _, ok := w.Chunks[x]; !ok {
+		w.Chunks[x] = map[int]*Chunk{}
+	}
+
+	w.Chunks[x][y] = c
+}
+
 func (w *World) pruneChunks(keepList []pixel.Vec) {
 	w.UpdateMutex.Lock()
 	defer w.UpdateMutex.Unlock()
 
 	for x, col := range w.Chunks {
-		for y, _ := range col {
+		for y := range col {
 			found := false
 
 			for _, c := range keepList {
