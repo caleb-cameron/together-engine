@@ -3,6 +3,7 @@ package engine
 import (
 	"sync"
 
+	"github.com/abeardevil/together-engine/pb"
 	"github.com/faiface/pixel"
 )
 
@@ -28,6 +29,18 @@ func NewPlayer(username string, position pixel.Vec, speed float64, acceleration 
 		Speed:        speed,
 		Acceleration: acceleration,
 		Sprite:       sprite,
+		Mutex:        sync.RWMutex{},
+	}
+}
+
+func PlayerFromProto(proto *pb.PlayerEvent) *Player {
+	return &Player{
+		Username:     proto.Username,
+		Position:     pixel.Vec{X: float64(proto.Position.Position.X), Y: float64(proto.Position.Position.Y)},
+		Velocity:     pixel.Vec{X: float64(proto.Position.Velocity.X), Y: float64(proto.Position.Velocity.Y)},
+		Speed:        PlayerSpeed,
+		Acceleration: PlayerAcceleration,
+		Sprite:       DefaultCharacterSprite,
 		Mutex:        sync.RWMutex{},
 	}
 }
