@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type GameServiceClient interface {
 	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (GameService_ConnectClient, error)
 	SendPlayerUpdates(ctx context.Context, opts ...grpc.CallOption) (GameService_SendPlayerUpdatesClient, error)
+	LoadChunk(ctx context.Context, in *Vector, opts ...grpc.CallOption) (*Chunk, error)
 }
 
 type gameServiceClient struct {
@@ -96,12 +97,22 @@ func (x *gameServiceSendPlayerUpdatesClient) CloseAndRecv() (*Ack, error) {
 	return m, nil
 }
 
+func (c *gameServiceClient) LoadChunk(ctx context.Context, in *Vector, opts ...grpc.CallOption) (*Chunk, error) {
+	out := new(Chunk)
+	err := c.cc.Invoke(ctx, "/pb.GameService/LoadChunk", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GameServiceServer is the server API for GameService service.
 // All implementations must embed UnimplementedGameServiceServer
 // for forward compatibility
 type GameServiceServer interface {
 	Connect(*ConnectRequest, GameService_ConnectServer) error
 	SendPlayerUpdates(GameService_SendPlayerUpdatesServer) error
+	LoadChunk(context.Context, *Vector) (*Chunk, error)
 	mustEmbedUnimplementedGameServiceServer()
 }
 
@@ -114,6 +125,9 @@ func (UnimplementedGameServiceServer) Connect(*ConnectRequest, GameService_Conne
 }
 func (UnimplementedGameServiceServer) SendPlayerUpdates(GameService_SendPlayerUpdatesServer) error {
 	return status.Errorf(codes.Unimplemented, "method SendPlayerUpdates not implemented")
+}
+func (UnimplementedGameServiceServer) LoadChunk(context.Context, *Vector) (*Chunk, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LoadChunk not implemented")
 }
 func (UnimplementedGameServiceServer) mustEmbedUnimplementedGameServiceServer() {}
 
@@ -175,13 +189,36 @@ func (x *gameServiceSendPlayerUpdatesServer) Recv() (*PlayerEvent, error) {
 	return m, nil
 }
 
+func _GameService_LoadChunk_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Vector)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameServiceServer).LoadChunk(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.GameService/LoadChunk",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameServiceServer).LoadChunk(ctx, req.(*Vector))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GameService_ServiceDesc is the grpc.ServiceDesc for GameService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var GameService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.GameService",
 	HandlerType: (*GameServiceServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "LoadChunk",
+			Handler:    _GameService_LoadChunk_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "Connect",

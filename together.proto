@@ -36,7 +36,13 @@ message GameState {
   repeated PlayerEvent Players = 1;
 }
 
+message Chunk {
+  Vector Coordinates = 1;
+  bytes ChunkData = 2;
+}
+
 service GameService {
   rpc Connect(ConnectRequest) returns (stream GameState);
   rpc SendPlayerUpdates(stream PlayerEvent) returns (Ack);
+  rpc LoadChunk(Vector) returns (Chunk);
 }
