@@ -57,7 +57,13 @@ func (p *playerList) UpdatePlayer(username string, player *Player) error {
 	// We only lock it to block reads first.
 	p.players[username].Mutex.Lock()
 
-	p.players[username] = player
+	p.players[username].Position.X = player.Position.X
+	p.players[username].Position.Y = player.Position.Y
+
+	p.players[username].Velocity.X = player.Velocity.X
+	p.players[username].Velocity.Y = player.Velocity.Y
+	p.players[username].Mutex.Unlock()
+
 	p.recentUpdates = append(p.recentUpdates, username)
 
 	return nil
