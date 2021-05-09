@@ -90,9 +90,19 @@ func (w *World) CreateChunk(x, y int) {
 	w.Chunks[x][y] = c
 	w.UpdateMutex.Unlock()
 }
-
-func (w *World) UpdateLoadedChunks() {
+func (w *World) UpdateLoadedChunksServer() {
 	players := PlayerList.GetPlayers()
+
+	w.UpdateLoadedChunks(players)
+}
+
+func (w *World) UpdateLoadedChunksClient() {
+	w.UpdateLoadedChunks(map[string]*Player{
+		GPlayer.Username: GPlayer,
+	})
+}
+
+func (w *World) UpdateLoadedChunks(players map[string]*Player) {
 
 	chunkLoadPadding := 2.0
 
