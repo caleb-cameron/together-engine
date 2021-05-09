@@ -55,7 +55,7 @@ func DeserializeChunk(b []byte) *Chunk {
 
 	c := NewChunk(pixel.R(float64(x*ChunkSize), float64(y*ChunkSize), float64((x+1)*ChunkSize), float64((y+1)*ChunkSize)))
 
-	byteIndex := 2
+	byteIndex := 4
 	for x := range c.Tiles {
 		for y := range c.Tiles[x] {
 			c.Tiles[x][y] = tiles[int(binary.LittleEndian.Uint16(b[byteIndex:byteIndex+2]))]
