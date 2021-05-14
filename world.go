@@ -103,9 +103,7 @@ func (w *World) UpdateLoadedChunksClient() {
 }
 
 func (w *World) UpdateLoadedChunks(players map[string]*Player) {
-
 	chunkLoadPadding := 2.0
-
 	keepList := []pixel.Vec{}
 	w.UpdateMutex.RLock()
 
@@ -115,14 +113,7 @@ func (w *World) UpdateLoadedChunks(players map[string]*Player) {
 
 		loadRect := pixel.R(playerX-ChunkLoadRadius-chunkLoadPadding, playerY-ChunkLoadRadius-chunkLoadPadding, playerX+ChunkLoadRadius+chunkLoadPadding, playerY+ChunkLoadRadius+chunkLoadPadding)
 
-		for x, col := range w.Chunks {
-			for y := range col {
-				chunkPos := pixel.V(float64(x), float64(y))
-				if loadRect.Contains(chunkPos) {
-					keepList = append(keepList, chunkPos)
-				}
-			}
-		}
+		keepList = append(keepList, getChunksCoordsInRect(loadRect, chunkLoadPadding)...)
 	}
 
 	w.UpdateMutex.RUnlock()

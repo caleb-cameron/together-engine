@@ -2,7 +2,22 @@ package engine
 
 import (
 	"os"
+
+	"github.com/faiface/pixel"
 )
+
+func getChunksCoordsInRect(rect pixel.Rect, chunkLoadPadding float64) []pixel.Vec {
+
+	out := []pixel.Vec{}
+
+	for x := rect.Min.X - chunkLoadPadding; x < rect.Max.X+1+chunkLoadPadding; x++ {
+		for y := rect.Min.Y - chunkLoadPadding; y < rect.Max.Y+1+chunkLoadPadding; y++ {
+			out = append(out, pixel.Vec{X: x, Y: y})
+		}
+	}
+
+	return out
+}
 
 func makeRange(min, max int) []int {
 	a := make([]int, max-min+1)
