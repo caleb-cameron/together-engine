@@ -96,24 +96,28 @@ func (w *World) UpdateLoadedChunksServer() {
 	w.UpdateLoadedChunks(players)
 }
 
-func (w *World) UpdateLoadedChunksClient() {
-	w.UpdateLoadedChunks(map[string]*Player{
-		GPlayer.Username: GPlayer,
-	})
+func (w *World) GetPlayerLoadRect(player *Player, chunkLoadPadding float64) pixel.Rect {
+	playerX := player.GetPosition().X / float64(ChunkSize) / float64(TileSize)
+	playerY := player.GetPosition().Y / float64(ChunkSize) / float64(TileSize)
+
+	loadRect := pixel.R(playerX-ChunkLoadRadius-chunkLoadPadding, playerY-ChunkLoadRadius-chunkLoadPadding, playerX+ChunkLoadRadius+chunkLoadPadding, playerY+ChunkLoadRadius+chunkLoadPadding)
+
+	return loadRect
+}
+
+func (w *World) GetChunksToLoadForPlayer(player *Player) []pixel.Vec {
+	chunkLoadPadding := 2.0
+	loadRect := w.GetPlayerLoadRect(player, chunkLoadPadding)
+
+	return getChunksCoordsInRect(loadRect, chunkLoadPadding)
 }
 
 func (w *World) UpdateLoadedChunks(players map[string]*Player) {
-	chunkLoadPadding := 2.0
 	keepList := []pixel.Vec{}
 	w.UpdateMutex.RLock()
 
 	for _, player := range players {
-		playerX := player.GetPosition().X / float64(ChunkSize) / float64(TileSize)
-		playerY := player.GetPosition().Y / float64(ChunkSize) / float64(TileSize)
-
-		loadRect := pixel.R(playerX-ChunkLoadRadius-chunkLoadPadding, playerY-ChunkLoadRadius-chunkLoadPadding, playerX+ChunkLoadRadius+chunkLoadPadding, playerY+ChunkLoadRadius+chunkLoadPadding)
-
-		keepList = append(keepList, getChunksCoordsInRect(loadRect, chunkLoadPadding)...)
+		keepList = append(keepList, w.GetChunksToLoadForPlayer(player)...)
 	}
 
 	w.UpdateMutex.RUnlock()
