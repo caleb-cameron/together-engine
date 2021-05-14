@@ -122,6 +122,15 @@ func (w *World) UpdateLoadedChunks(players map[string]*Player) {
 
 	w.UpdateMutex.RUnlock()
 	w.pruneChunks(keepList)
+
+	for _, pos := range keepList {
+		x := int(pos.X)
+		y := int(pos.Y)
+
+		if !w.ChunkExists(x, y) {
+			w.LoadOrCreateChunk(x, y)
+		}
+	}
 }
 
 func (w *World) InsertChunk(x int, y int, c *Chunk) {
