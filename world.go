@@ -160,6 +160,10 @@ func (w *World) pruneChunks(keepList []pixel.Vec) {
 	}
 }
 
+func (w *World) CanLoadChunk(x, y int) bool {
+	return ChunkCanBeLoaded(x, y)
+}
+
 func (w *World) LoadChunk(x, y int) {
 	if _, ok := w.Chunks[x]; !ok {
 		w.Chunks[x] = make(map[int]*Chunk, 10)
