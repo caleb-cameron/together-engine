@@ -158,10 +158,11 @@ func (c *Chunk) Generate() {
 }
 
 func (c *Chunk) GenerateBoundaryTiles() {
+	chunkPos := c.GetChunkPos()
+
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 
-	chunkPos := c.GetChunkPos()
 	xpos, ypos := int(chunkPos.X), int(chunkPos.Y)
 	var (
 		leftChunk        *Chunk
