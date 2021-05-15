@@ -32,14 +32,19 @@ func (w *World) Init() {
 	if err != nil && !os.IsExist(err) {
 		panic(err)
 	}
+
+	w.Chunks = make(map[int]map[int]*Chunk, 10)
+
+	for i, row := range w.Chunks {
+		if row == nil {
+			w.Chunks[i] = make(map[int]*Chunk, 10)
+		}
+	}
 }
 
 func (w *World) Generate() {
-
 	numChunksH := 2 //(int(gWindow.Bounds().H()) / TileSize / ChunkSize) + 1
 	numChunksW := 2 //(int(gWindow.Bounds().W()) / TileSize / ChunkSize) + 1
-
-	w.Chunks = make(map[int]map[int]*Chunk, numChunksW)
 
 	for x := 0 - numChunksW/2; x < numChunksW/2; x++ {
 		w.Chunks[x] = make(map[int]*Chunk, numChunksH)
@@ -53,9 +58,6 @@ func (w *World) Generate() {
 	}
 
 	for _, row := range w.Chunks {
-		if row == nil {
-			row = make(map[int]*Chunk, 10)
-		}
 		for _, c := range row {
 			if !c.Generated {
 				//fmt.Printf("Generating c %d, %d\n", x, y)
