@@ -122,11 +122,7 @@ func (w *World) UpdateLoadedChunks(players map[string]*Player) {
 
 	w.UpdateMutex.RUnlock()
 
-	beforePrune := w.GetNumLoadedChunks()
 	w.pruneChunks(keepList)
-	afterPrune := w.GetNumLoadedChunks()
-
-	log.Printf("Pruned %d chunks (from %d to %d)", beforePrune-afterPrune, beforePrune, afterPrune)
 
 	for _, pos := range keepList {
 		x := int(pos.X)
@@ -149,7 +145,7 @@ func (w *World) InsertChunk(x int, y int, c *Chunk) {
 	w.Chunks[x][y] = c
 }
 
-func (w *World) pruneChunks(keepList []pixel.Vec) {
+func (w *World) PruneChunks(keepList []pixel.Vec) {
 	// w.UpdateMutex.Lock()
 	// defer w.UpdateMutex.Unlock()
 
