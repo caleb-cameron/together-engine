@@ -177,6 +177,19 @@ func (w *World) CanLoadChunk(x, y int) bool {
 	return ChunkCanBeLoaded(x, y)
 }
 
+func (w *World) GetNumLoadedChunks() int {
+	w.UpdateMutex.RLock()
+	defer w.UpdateMutex.RUnlock()
+
+	out := 0
+
+	for _, row := range w.Chunks {
+		out += len(row)
+	}
+
+	return out
+}
+
 func (w *World) GetLoadedChunks() map[int]map[int]*Chunk {
 	w.UpdateMutex.RLock()
 	defer w.UpdateMutex.RUnlock()
