@@ -5,7 +5,8 @@ import (
 )
 
 const (
-	tileGrass = iota
+	tileInvalid = iota
+	tileGrass
 	tileGrassTopLeftCorner
 	tileGrassTopRightCorner
 	tileGrassBottomLeftCorner
