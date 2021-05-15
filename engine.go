@@ -4,7 +4,7 @@ var (
 	ChunksDir              string
 	ChunkSize              int
 	ChunkLoadRadius        float64
-	ChunkLoadPadding       int
+	ChunkLoadPadding       float64
 	WorldMaxAltitude       int
 	GWorld                 World
 	TileSize               int

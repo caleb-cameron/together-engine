@@ -10,8 +10,8 @@ func getChunksCoordsInRect(rect pixel.Rect) []pixel.Vec {
 
 	out := []pixel.Vec{}
 
-	for x := rect.Min.X - float64(ChunkLoadPadding); x < rect.Max.X+1+float64(ChunkLoadPadding); x++ {
-		for y := rect.Min.Y - float64(ChunkLoadPadding); y < rect.Max.Y+1+float64(ChunkLoadPadding); y++ {
+	for x := rect.Min.X - ChunkLoadPadding; x < rect.Max.X+1+ChunkLoadPadding; x++ {
+		for y := rect.Min.Y - ChunkLoadPadding; y < rect.Max.Y+1+ChunkLoadPadding; y++ {
 			out = append(out, pixel.Vec{X: x, Y: y})
 		}
 	}

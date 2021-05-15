@@ -101,7 +101,7 @@ func (w *World) GetPlayerLoadRect(player *Player) pixel.Rect {
 	playerX := player.GetPosition().X / float64(ChunkSize) / float64(TileSize)
 	playerY := player.GetPosition().Y / float64(ChunkSize) / float64(TileSize)
 
-	loadRect := pixel.R(playerX-ChunkLoadRadius-float64(ChunkLoadPadding), playerY-ChunkLoadRadius-float64(ChunkLoadPadding), playerX+ChunkLoadRadius+float64(ChunkLoadPadding), playerY+ChunkLoadRadius+float64(ChunkLoadPadding))
+	loadRect := pixel.R(playerX-ChunkLoadRadius-ChunkLoadPadding, playerY-ChunkLoadRadius-ChunkLoadPadding, playerX+ChunkLoadRadius+ChunkLoadPadding, playerY+ChunkLoadRadius+ChunkLoadPadding)
 
 	return loadRect
 }
