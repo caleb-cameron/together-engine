@@ -122,7 +122,7 @@ func (w *World) UpdateLoadedChunks(players map[string]*Player) {
 
 	w.UpdateMutex.RUnlock()
 
-	w.pruneChunks(keepList)
+	w.PruneChunks(keepList)
 
 	for _, pos := range keepList {
 		x := int(pos.X)
