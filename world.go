@@ -47,7 +47,6 @@ func (w *World) Generate() {
 	numChunksW := 2 //(int(gWindow.Bounds().W()) / TileSize / ChunkSize) + 1
 
 	for x := 0 - numChunksW/2; x < numChunksW/2; x++ {
-		w.Chunks[x] = make(map[int]*Chunk, numChunksH)
 		for y := 0 - numChunksH/2; y < numChunksH/2; y++ {
 			if ChunkCanBeLoaded(x, y) {
 				w.LoadChunk(x, y)
@@ -60,7 +59,7 @@ func (w *World) Generate() {
 	for _, row := range w.Chunks {
 		for _, c := range row {
 			if !c.Generated {
-				//fmt.Printf("Generating c %d, %d\n", x, y)
+				// fmt.Printf("Generating c %d, %d\n", int(c.Bounds.Min.X)/ChunkSize, int(c.Bounds.Min.Y)/ChunkSize)
 				c.Generate()
 			}
 		}
@@ -173,6 +172,14 @@ func (w *World) pruneChunks(keepList []pixel.Vec) {
 
 func (w *World) CanLoadChunk(x, y int) bool {
 	return ChunkCanBeLoaded(x, y)
+}
+
+func (w *World) GetLoadedChunks() map[int]map[int]*Chunk {
+
+	w.UpdateMutex.RLock()
+	defer w.UpdateMutex.RUnlock()
+
+	return w.Chunks
 }
 
 func (w *World) LoadChunk(x, y int) {
