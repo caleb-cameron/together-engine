@@ -121,7 +121,12 @@ func (w *World) UpdateLoadedChunks(players map[string]*Player) {
 	}
 
 	w.UpdateMutex.RUnlock()
+
+	beforePrune := w.GetNumLoadedChunks()
 	w.pruneChunks(keepList)
+	afterPrune := w.GetNumLoadedChunks()
+
+	log.Printf("Pruned %d chunks (from %d to %d)", beforePrune-afterPrune, beforePrune, afterPrune)
 
 	for _, pos := range keepList {
 		x := int(pos.X)
