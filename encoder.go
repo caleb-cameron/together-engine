@@ -26,7 +26,7 @@ func (e *Encoder) Unlock() {
 	e.Locked = false
 }
 
-func (e *Encoder) Encode(c Chunk) ([]byte, error) {
+func (e *Encoder) Encode(c *Chunk) ([]byte, error) {
 	return SerializeChunk(c), nil
 }
 

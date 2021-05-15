@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"sync"
 
 	perlin "github.com/aquilax/go-perlin"
 	"github.com/faiface/pixel"
@@ -15,6 +16,7 @@ type Chunk struct {
 	Tiles     [][]Tile // Rows then columns
 	Generated bool
 	changed   bool
+	mutex     sync.RWMutex
 }
 
 var Noise *perlin.Perlin
@@ -28,7 +30,24 @@ func NewChunk(bounds pixel.Rect) *Chunk {
 	return &Chunk{
 		Bounds: bounds,
 		Tiles:  columns,
+		mutex:  sync.RWMutex{},
 	}
+}
+
+func (c *Chunk) Lock() {
+	c.mutex.Lock()
+}
+
+func (c *Chunk) Unlock() {
+	c.mutex.Unlock()
+}
+
+func (c *Chunk) RLock() {
+	c.mutex.RLock()
+}
+
+func (c *Chunk) RUnlock() {
+	c.mutex.RUnlock()
 }
 
 func ChunkCanBeLoaded(x, y int) bool {
@@ -85,6 +104,9 @@ func (c *Chunk) GetChunkPos() pixel.Vec {
 		log.Println("Attempt to call GetChunkPos on nil chunk")
 		return pixel.Vec{}
 	}
+	c.mutex.RLock()
+	defer c.mutex.RUnlock()
+
 	return pixel.Vec{
 		X: c.Bounds.Min.X / float64(ChunkSize),
 		Y: c.Bounds.Min.Y / float64(ChunkSize),
@@ -95,6 +117,9 @@ func (c *Chunk) GetNeighborChunkPositions() []pixel.Vec {
 	if c == nil {
 		return nil
 	}
+
+	c.mutex.RLock()
+	defer c.mutex.RUnlock()
 
 	pos := c.GetChunkPos()
 	return []pixel.Vec{
@@ -110,6 +135,9 @@ func (c *Chunk) GetNeighborChunkPositions() []pixel.Vec {
 }
 
 func (c *Chunk) Generate() {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	for x, col := range c.Tiles {
 		xpos := int(c.Bounds.Min.X) + x
 		for y, _ := range col {
@@ -130,6 +158,9 @@ func (c *Chunk) Generate() {
 }
 
 func (c *Chunk) GenerateBoundaryTiles() {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
 	chunkPos := c.GetChunkPos()
 	xpos, ypos := int(chunkPos.X), int(chunkPos.Y)
 	var (
@@ -405,6 +436,9 @@ func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTil
 }
 
 func (c *Chunk) PersistToDisk() {
+	c.mutex.RLock()
+	defer c.mutex.RUnlock()
+
 	b, err := c.Encode()
 
 	if err != nil {
@@ -416,7 +450,10 @@ func (c *Chunk) PersistToDisk() {
 }
 
 func (c *Chunk) Encode() ([]byte, error) {
-	return GWorld.Encoder.Encode(*c)
+	c.mutex.RLock()
+	defer c.mutex.RUnlock()
+
+	return GWorld.Encoder.Encode(c)
 }
 
 func DecodeChunk(b []byte) (*Chunk, error) {

@@ -134,8 +134,8 @@ func (w *World) UpdateLoadedChunks(players map[string]*Player) {
 }
 
 func (w *World) InsertChunk(x int, y int, c *Chunk) {
-	w.UpdateMutex.Lock()
-	defer w.UpdateMutex.Unlock()
+	// w.UpdateMutex.Lock()
+	// defer w.UpdateMutex.Unlock()
 
 	if _, ok := w.Chunks[x]; !ok {
 		w.Chunks[x] = map[int]*Chunk{}
@@ -145,8 +145,8 @@ func (w *World) InsertChunk(x int, y int, c *Chunk) {
 }
 
 func (w *World) pruneChunks(keepList []pixel.Vec) {
-	w.UpdateMutex.Lock()
-	defer w.UpdateMutex.Unlock()
+	// w.UpdateMutex.Lock()
+	// defer w.UpdateMutex.Unlock()
 
 	for x, col := range w.Chunks {
 		for y := range col {
@@ -160,11 +160,15 @@ func (w *World) pruneChunks(keepList []pixel.Vec) {
 			}
 
 			if !found {
+				w.Chunks[x][y].Lock()
 				delete(w.Chunks[x], y)
+				w.Chunks[x][y].Unlock()
 			}
 		}
 		if len(w.Chunks[x]) == 0 {
+			w.UpdateMutex.Lock()
 			delete(w.Chunks, x)
+			w.UpdateMutex.Unlock()
 		}
 	}
 }

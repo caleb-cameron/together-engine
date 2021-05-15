@@ -17,7 +17,7 @@ import (
 	tile ids (1 uint16 * width * height)
 */
 
-func SerializeChunk(c Chunk) []byte {
+func SerializeChunk(c *Chunk) []byte {
 	w := uint16(c.Bounds.W())
 	h := uint16(c.Bounds.H())
 	x := uint16(c.Bounds.Min.X / float64(ChunkSize))
