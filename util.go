@@ -6,12 +6,12 @@ import (
 	"github.com/faiface/pixel"
 )
 
-func getChunksCoordsInRect(rect pixel.Rect, chunkLoadPadding float64) []pixel.Vec {
+func getChunksCoordsInRect(rect pixel.Rect) []pixel.Vec {
 
 	out := []pixel.Vec{}
 
-	for x := rect.Min.X - chunkLoadPadding; x < rect.Max.X+1+chunkLoadPadding; x++ {
-		for y := rect.Min.Y - chunkLoadPadding; y < rect.Max.Y+1+chunkLoadPadding; y++ {
+	for x := rect.Min.X - float64(ChunkLoadPadding); x < rect.Max.X+1+float64(ChunkLoadPadding); x++ {
+		for y := rect.Min.Y - float64(ChunkLoadPadding); y < rect.Max.Y+1+float64(ChunkLoadPadding); y++ {
 			out = append(out, pixel.Vec{X: x, Y: y})
 		}
 	}

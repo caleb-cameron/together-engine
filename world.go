@@ -97,20 +97,19 @@ func (w *World) UpdateLoadedChunksServer() {
 	w.UpdateLoadedChunks(players)
 }
 
-func (w *World) GetPlayerLoadRect(player *Player, chunkLoadPadding float64) pixel.Rect {
+func (w *World) GetPlayerLoadRect(player *Player) pixel.Rect {
 	playerX := player.GetPosition().X / float64(ChunkSize) / float64(TileSize)
 	playerY := player.GetPosition().Y / float64(ChunkSize) / float64(TileSize)
 
-	loadRect := pixel.R(playerX-ChunkLoadRadius-chunkLoadPadding, playerY-ChunkLoadRadius-chunkLoadPadding, playerX+ChunkLoadRadius+chunkLoadPadding, playerY+ChunkLoadRadius+chunkLoadPadding)
+	loadRect := pixel.R(playerX-ChunkLoadRadius-float64(ChunkLoadPadding), playerY-ChunkLoadRadius-float64(ChunkLoadPadding), playerX+ChunkLoadRadius+float64(ChunkLoadPadding), playerY+ChunkLoadRadius+float64(ChunkLoadPadding))
 
 	return loadRect
 }
 
 func (w *World) GetChunksToLoadForPlayer(player *Player) []pixel.Vec {
-	chunkLoadPadding := 2.0
-	loadRect := w.GetPlayerLoadRect(player, chunkLoadPadding)
+	loadRect := w.GetPlayerLoadRect(player)
 
-	return getChunksCoordsInRect(loadRect, chunkLoadPadding)
+	return getChunksCoordsInRect(loadRect)
 }
 
 func (w *World) UpdateLoadedChunks(players map[string]*Player) {
@@ -175,7 +174,6 @@ func (w *World) CanLoadChunk(x, y int) bool {
 }
 
 func (w *World) GetLoadedChunks() map[int]map[int]*Chunk {
-
 	w.UpdateMutex.RLock()
 	defer w.UpdateMutex.RUnlock()
 
