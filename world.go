@@ -162,7 +162,6 @@ func (w *World) pruneChunks(keepList []pixel.Vec) {
 			if !found {
 				w.Chunks[x][y].Lock()
 				delete(w.Chunks[x], y)
-				w.Chunks[x][y].Unlock()
 			}
 		}
 		if len(w.Chunks[x]) == 0 {
