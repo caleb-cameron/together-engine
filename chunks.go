@@ -147,9 +147,9 @@ func (c *Chunk) Generate() {
 			//fmt.Printf("tileHeight: %d\n", tileHeight)
 			//fmt.Println(altitudeNoise)
 			if tileHeight < 5 {
-				c.Tiles[x][y] = tiles[tileWater]
+				c.Tiles[x][y] = tiles[TileWater]
 			} else {
-				c.Tiles[x][y] = tiles[tileGrass]
+				c.Tiles[x][y] = tiles[TileGrass]
 			}
 
 			c.Tiles[x][y].Chunk = c
@@ -378,35 +378,18 @@ func (c *Chunk) GenerateBoundaryTiles() {
 
 }
 
-func (c *Chunk) ToggleTile(worldPos pixel.Vec) {
-	tileOffset := worldPos.Sub(c.Bounds.Min)
+func (c *Chunk) GetTile(x, y int) *Tile {
+	c.RLock()
+	defer c.RUnlock()
 
-	tileX := int(tileOffset.X / float64(TileSize))
-	tileY := int(tileOffset.Y / float64(TileSize))
+	return &c.Tiles[x][y]
+}
 
-	if tileX < 0 {
-		tileX += ChunkSize
-	}
-
-	if tileY < 0 {
-		tileY += ChunkSize
-	}
-
-	if tileX >= ChunkSize || tileY >= ChunkSize {
-		// Invalid tile
-		return
-	}
-
+func (c *Chunk) ReplaceTile(x, y int, tile Tile) {
 	c.Lock()
 	defer c.Unlock()
 
-	tile := &c.Tiles[tileX][tileY]
-
-	if tile.DisplayName == "grass" {
-		c.Tiles[tileX][tileY] = tiles[tileWater]
-	} else if tile.DisplayName == "water" {
-		c.Tiles[tileX][tileY] = tiles[tileGrass]
-	}
+	c.Tiles[x][y] = tile
 }
 
 func (c *Chunk) PersistToDisk() {

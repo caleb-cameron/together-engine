@@ -5,29 +5,29 @@ import (
 )
 
 const (
-	tileInvalid = iota
-	tileGrass
-	tileGrassTopLeftCorner
-	tileGrassTopRightCorner
-	tileGrassBottomLeftCorner
-	tileGrassBottomRightCorner
-	tileGrassTopSide
-	tileGrassBottomSide
-	tileGrassLeftSide
-	tileGrassRightSide
-	tileWater
-	tileWaterTopLeftCorner
-	tileWaterTopRightCorner
-	tileWaterBottomLeftCorner
-	tileWaterBottomRightCorner
-	tileWaterTopSide
-	tileWaterBottomSide
-	tileWaterLeftSide
-	tileWaterRightSide
-	tileGrassBottomRightWaterCorner
-	tileGrassBottomLeftWaterCorner
-	tileGrassTopRightWaterCorner
-	tileGrassTopLeftWaterCorner
+	TileInvalid = iota
+	TileGrass
+	TileGrassTopLeftCorner
+	TileGrassTopRightCorner
+	TileGrassBottomLeftCorner
+	TileGrassBottomRightCorner
+	TileGrassTopSide
+	TileGrassBottomSide
+	TileGrassLeftSide
+	TileGrassRightSide
+	TileWater
+	TileWaterTopLeftCorner
+	TileWaterTopRightCorner
+	TileWaterBottomLeftCorner
+	TileWaterBottomRightCorner
+	TileWaterTopSide
+	TileWaterBottomSide
+	TileWaterLeftSide
+	TileWaterRightSide
+	TileGrassBottomRightWaterCorner
+	TileGrassBottomLeftWaterCorner
+	TileGrassTopRightWaterCorner
+	TileGrassTopLeftWaterCorner
 )
 
 type Tile struct {
@@ -51,28 +51,28 @@ var tiles map[int]Tile
 
 func InitTiles() {
 	tiles = map[int]Tile{
-		tileGrass:                       {Id: tileGrass, Name: "grass", DisplayName: "grass", Sprite: "grass", Visible: true},
-		tileGrassTopLeftCorner:          {Id: tileGrassTopLeftCorner, Name: "grassTopLeftCorner", DisplayName: "grass", Sprite: "grassTopLeftCorner", Visible: true},
-		tileGrassTopRightCorner:         {Id: tileGrassTopRightCorner, Name: "grassTopRightCorner", DisplayName: "grass", Sprite: "grassTopRightCorner", Visible: true},
-		tileGrassBottomLeftCorner:       {Id: tileGrassBottomLeftCorner, Name: "grassBottomLeftCorner", DisplayName: "grass", Sprite: "grassBottomLeftCorner", Visible: true},
-		tileGrassBottomRightCorner:      {Id: tileGrassBottomRightCorner, Name: "grassBottomRightCorner", DisplayName: "grass", Sprite: "grassBottomRightCorner", Visible: true},
-		tileGrassTopSide:                {Id: tileGrassTopSide, Name: "grassTopSide", DisplayName: "grass", Sprite: "grassTopSide", Visible: true},
-		tileGrassBottomSide:             {Id: tileGrassBottomSide, Name: "grassBottomSide", DisplayName: "grass", Sprite: "grassBottomSide", Visible: true},
-		tileGrassLeftSide:               {Id: tileGrassLeftSide, Name: "grassLeftSide", DisplayName: "grass", Sprite: "grassLeftSide", Visible: true},
-		tileGrassRightSide:              {Id: tileGrassRightSide, Name: "grassRightSide", DisplayName: "grass", Sprite: "grassRightSide", Visible: true},
-		tileWater:                       {Id: tileWater, Name: "water", DisplayName: "water", Sprite: "water", Visible: true},
-		tileWaterTopLeftCorner:          {Id: tileWaterTopLeftCorner, Name: "waterTopLeftCorner", DisplayName: "water", Sprite: "waterTopLeftCorner", Visible: true},
-		tileWaterTopRightCorner:         {Id: tileWaterTopRightCorner, Name: "waterTopRightCorner", DisplayName: "water", Sprite: "waterTopRightCorner", Visible: true},
-		tileWaterBottomLeftCorner:       {Id: tileWaterBottomLeftCorner, Name: "waterBottomLeftCorner", DisplayName: "water", Sprite: "waterBottomLeftCorner", Visible: true},
-		tileWaterBottomRightCorner:      {Id: tileWaterBottomRightCorner, Name: "waterBottomRightCorner", DisplayName: "water", Sprite: "waterBottomRightCorner", Visible: true},
-		tileWaterTopSide:                {Id: tileWaterTopSide, Name: "waterTopSide", DisplayName: "water", Sprite: "waterTopSide", Visible: true},
-		tileWaterBottomSide:             {Id: tileWaterBottomSide, Name: "waterBottomSide", DisplayName: "water", Sprite: "waterBottomSide", Visible: true},
-		tileWaterLeftSide:               {Id: tileWaterLeftSide, Name: "waterLeftSide", DisplayName: "water", Sprite: "waterLeftSide", Visible: true},
-		tileWaterRightSide:              {Id: tileWaterRightSide, Name: "waterRightSide", DisplayName: "water", Sprite: "waterRightSide", Visible: true},
-		tileGrassTopLeftWaterCorner:     {Id: tileGrassTopLeftWaterCorner, Name: "grassTopLeftWaterCorner", DisplayName: "grass", Sprite: "grassTopLeftWaterCorner", Visible: true},
-		tileGrassTopRightWaterCorner:    {Id: tileGrassTopRightWaterCorner, Name: "grassTopRightWaterCorner", DisplayName: "grass", Sprite: "grassTopRightWaterCorner", Visible: true},
-		tileGrassBottomLeftWaterCorner:  {Id: tileGrassBottomLeftWaterCorner, Name: "grassBottomLeftWaterCorner", DisplayName: "grass", Sprite: "grassBottomLeftWaterCorner", Visible: true},
-		tileGrassBottomRightWaterCorner: {Id: tileGrassBottomRightWaterCorner, Name: "grassBottomRightWaterCorner", DisplayName: "grass", Sprite: "grassBottomRightWaterCorner", Visible: true},
+		TileGrass:                       {Id: TileGrass, Name: "grass", DisplayName: "grass", Sprite: "grass", Visible: true},
+		TileGrassTopLeftCorner:          {Id: TileGrassTopLeftCorner, Name: "grassTopLeftCorner", DisplayName: "grass", Sprite: "grassTopLeftCorner", Visible: true},
+		TileGrassTopRightCorner:         {Id: TileGrassTopRightCorner, Name: "grassTopRightCorner", DisplayName: "grass", Sprite: "grassTopRightCorner", Visible: true},
+		TileGrassBottomLeftCorner:       {Id: TileGrassBottomLeftCorner, Name: "grassBottomLeftCorner", DisplayName: "grass", Sprite: "grassBottomLeftCorner", Visible: true},
+		TileGrassBottomRightCorner:      {Id: TileGrassBottomRightCorner, Name: "grassBottomRightCorner", DisplayName: "grass", Sprite: "grassBottomRightCorner", Visible: true},
+		TileGrassTopSide:                {Id: TileGrassTopSide, Name: "grassTopSide", DisplayName: "grass", Sprite: "grassTopSide", Visible: true},
+		TileGrassBottomSide:             {Id: TileGrassBottomSide, Name: "grassBottomSide", DisplayName: "grass", Sprite: "grassBottomSide", Visible: true},
+		TileGrassLeftSide:               {Id: TileGrassLeftSide, Name: "grassLeftSide", DisplayName: "grass", Sprite: "grassLeftSide", Visible: true},
+		TileGrassRightSide:              {Id: TileGrassRightSide, Name: "grassRightSide", DisplayName: "grass", Sprite: "grassRightSide", Visible: true},
+		TileWater:                       {Id: TileWater, Name: "water", DisplayName: "water", Sprite: "water", Visible: true},
+		TileWaterTopLeftCorner:          {Id: TileWaterTopLeftCorner, Name: "waterTopLeftCorner", DisplayName: "water", Sprite: "waterTopLeftCorner", Visible: true},
+		TileWaterTopRightCorner:         {Id: TileWaterTopRightCorner, Name: "waterTopRightCorner", DisplayName: "water", Sprite: "waterTopRightCorner", Visible: true},
+		TileWaterBottomLeftCorner:       {Id: TileWaterBottomLeftCorner, Name: "waterBottomLeftCorner", DisplayName: "water", Sprite: "waterBottomLeftCorner", Visible: true},
+		TileWaterBottomRightCorner:      {Id: TileWaterBottomRightCorner, Name: "waterBottomRightCorner", DisplayName: "water", Sprite: "waterBottomRightCorner", Visible: true},
+		TileWaterTopSide:                {Id: TileWaterTopSide, Name: "waterTopSide", DisplayName: "water", Sprite: "waterTopSide", Visible: true},
+		TileWaterBottomSide:             {Id: TileWaterBottomSide, Name: "waterBottomSide", DisplayName: "water", Sprite: "waterBottomSide", Visible: true},
+		TileWaterLeftSide:               {Id: TileWaterLeftSide, Name: "waterLeftSide", DisplayName: "water", Sprite: "waterLeftSide", Visible: true},
+		TileWaterRightSide:              {Id: TileWaterRightSide, Name: "waterRightSide", DisplayName: "water", Sprite: "waterRightSide", Visible: true},
+		TileGrassTopLeftWaterCorner:     {Id: TileGrassTopLeftWaterCorner, Name: "grassTopLeftWaterCorner", DisplayName: "grass", Sprite: "grassTopLeftWaterCorner", Visible: true},
+		TileGrassTopRightWaterCorner:    {Id: TileGrassTopRightWaterCorner, Name: "grassTopRightWaterCorner", DisplayName: "grass", Sprite: "grassTopRightWaterCorner", Visible: true},
+		TileGrassBottomLeftWaterCorner:  {Id: TileGrassBottomLeftWaterCorner, Name: "grassBottomLeftWaterCorner", DisplayName: "grass", Sprite: "grassBottomLeftWaterCorner", Visible: true},
+		TileGrassBottomRightWaterCorner: {Id: TileGrassBottomRightWaterCorner, Name: "grassBottomRightWaterCorner", DisplayName: "grass", Sprite: "grassBottomRightWaterCorner", Visible: true},
 	}
 
 	log.Println("Tiles initialized.")
@@ -100,46 +100,46 @@ func (t *Tile) IsBottomEdge() bool {
 // func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTile,
 // 	topLeftCornerTile, topRightCornerTile, bottomLeftCornerTile, bottomRightCornerTile *Tile) Tile {
 // 	// return *thisTile
-// 	if thisTile.Id == tileWater {
+// 	if thisTile.Id == TileWater {
 // 		// We compare using displayName rather than Id because variants of the same kind of Tile
 // 		// ("grassLeftSide", "grassTopRightCorner", etc) will all have the same displayName ("grass")
 
 // 		if leftTile != nil && leftTile.DisplayName == "grass" && !leftTile.IsBorderTile {
 // 			if topTile != nil && topTile.DisplayName == "grass" {
 // 				// We're at the top left corner of a body of water
-// 				return tiles[tileWaterTopLeftCorner]
+// 				return tiles[TileWaterTopLeftCorner]
 // 			}
 // 			if bottomTile != nil && bottomTile.DisplayName == "grass" {
 // 				// We're at the bottom left corner of a body of water
-// 				return tiles[tileWaterBottomLeftCorner]
+// 				return tiles[TileWaterBottomLeftCorner]
 // 			}
 
 // 			// We're on the left side of a body of water
-// 			return tiles[tileWaterLeftSide]
+// 			return tiles[TileWaterLeftSide]
 // 		}
 
 // 		if rightTile != nil && rightTile.DisplayName == "grass" && !rightTile.IsCornerTile {
 // 			if topTile != nil && topTile.DisplayName == "grass" {
 // 				// We're at the top right corner of a body of water
-// 				return tiles[tileWaterTopRightCorner]
+// 				return tiles[TileWaterTopRightCorner]
 // 			}
 // 			if bottomTile != nil && bottomTile.DisplayName == "grass" {
 // 				// We're at the top right corner of a body of water
-// 				return tiles[tileWaterBottomRightCorner]
+// 				return tiles[TileWaterBottomRightCorner]
 // 			}
 
 // 			// We're on the right side of a body of water.
-// 			return tiles[tileWaterRightSide]
+// 			return tiles[TileWaterRightSide]
 // 		}
 
 // 		if topTile != nil && topTile.DisplayName == "grass" && !topTile.IsBorderTile {
 // 			// We're on the top side of a body of water.
-// 			return tiles[tileWaterTopSide]
+// 			return tiles[TileWaterTopSide]
 // 		}
 
 // 		if bottomTile != nil && bottomTile.DisplayName == "grass" && !bottomTile.IsBorderTile {
 // 			// We're on the bottom side of a body of water.
-// 			return tiles[tileWaterBottomSide]
+// 			return tiles[TileWaterBottomSide]
 // 		}
 
 // 		if topRightCornerTile != nil && topRightCornerTile.DisplayName == "grass" && !topRightCornerTile.IsBorderTile {
@@ -160,7 +160,7 @@ func (t *Tile) IsBottomEdge() bool {
 // 		}
 
 // 		// We're not on any edge, just floating at sea <3
-// 		return tiles[tileWater]
+// 		return tiles[TileWater]
 // 	}
 
 // 	// Right now we only add water boundary Tiles.
