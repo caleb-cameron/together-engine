@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"math"
 	"os"
 	"strconv"
 	"sync"
@@ -313,15 +312,64 @@ func (w *World) GetChunk(x, y int) *Chunk {
 	return w.Chunks[x][y]
 }
 
-func (w *World) GetChunkForPos(pos pixel.Vec) *Chunk {
-	x := int(math.Round(pos.X / float64(ChunkSize) / float64(TileSize)))
-	y := int(math.Round(pos.Y / float64(ChunkSize) / float64(TileSize)))
+func (w *World) GamePosToChunkAndTilePos(pos pixel.Vec) (int, int, int, int) {
+	tileX := int(pos.X) / ChunkSize % TileSize
+	tileY := int(pos.Y) / ChunkSize % TileSize
 
-	if w.ChunkExists(x, y) {
-		return w.GetChunk(x, y)
+	chunkX := (int(pos.X) - (ChunkSize / 2)) / ChunkSize / TileSize
+	chunkY := (int(pos.Y) - (ChunkSize / 2)) / ChunkSize / TileSize
+
+	if tileX < 0 {
+		chunkX -= 1
+		tileX += ChunkSize
+	}
+
+	if tileY < 0 {
+		chunkY -= 1
+		tileY += ChunkSize
+	}
+
+	return chunkX, chunkY, tileX, tileY
+}
+
+func (w *World) GetChunkForPos(pos pixel.Vec) *Chunk {
+	chunkX, chunkY, _, _ := w.GamePosToChunkAndTilePos(pos)
+
+	if w.ChunkExists(chunkX, chunkY) {
+		return w.GetChunk(chunkX, chunkY)
 	}
 
 	return nil
+}
+
+func (w *World) GetTileForPos(pos pixel.Vec) *Tile {
+	tileX := int(pos.X) / ChunkSize % TileSize
+	tileY := int(pos.Y) / ChunkSize % TileSize
+
+	chunkX := (int(pos.X) - (ChunkSize / 2)) / ChunkSize / TileSize
+	chunkY := (int(pos.Y) - (ChunkSize / 2)) / ChunkSize / TileSize
+
+	if tileX < 0 {
+		chunkX -= 1
+		tileX += ChunkSize
+	}
+
+	if tileY < 0 {
+		chunkY -= 1
+		tileY += ChunkSize
+	}
+
+	if !w.ChunkExists(chunkX, chunkY) {
+		return nil
+	}
+
+	c := w.GetChunk(chunkX, chunkY)
+
+	if c == nil {
+		return nil
+	}
+
+	return c.GetTile(tileX, tileY)
 }
 
 func (w *World) SetSeed(seed uint64) {
