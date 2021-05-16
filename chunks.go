@@ -390,6 +390,7 @@ func (c *Chunk) ReplaceTile(x, y int, tile Tile) {
 	defer c.Unlock()
 
 	c.Tiles[x][y] = tile
+	c.changed = true
 }
 
 func (c *Chunk) PersistToDisk() {
