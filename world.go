@@ -92,6 +92,7 @@ func (w *World) CreateChunk(x, y int) {
 
 		if n != nil {
 			n.GenerateBoundaryTiles()
+			n.PersistToDisk()
 		}
 	}
 
