@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"sync"
@@ -313,8 +314,8 @@ func (w *World) GetChunk(x, y int) *Chunk {
 }
 
 func (w *World) GetChunkForPos(pos pixel.Vec) *Chunk {
-	x := int(pos.X) / ChunkSize / TileSize
-	y := int(pos.Y) / ChunkSize / TileSize
+	x := int(math.Round(pos.X / float64(ChunkSize) / float64(TileSize)))
+	y := int(math.Round(pos.Y / float64(ChunkSize) / float64(TileSize)))
 
 	if w.ChunkExists(x, y) {
 		return w.GetChunk(x, y)
