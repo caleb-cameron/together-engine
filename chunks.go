@@ -378,9 +378,11 @@ func (c *Chunk) GenerateBoundaryTiles() {
 
 }
 
-func (c *Chunk) ToggleTile(x, y int) {
-	tileX := x - int(c.Bounds.Min.X)
-	tileY := y - int(c.Bounds.Min.Y)
+func (c *Chunk) ToggleTile(worldPos pixel.Vec) {
+	tileOffset := worldPos.Sub(c.Bounds.Min)
+
+	tileX := int(tileOffset.X) / TileSize
+	tileY := int(tileOffset.Y) / TileSize
 
 	if tileX >= ChunkSize || tileY >= ChunkSize {
 		// Invalid tile
