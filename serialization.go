@@ -59,6 +59,7 @@ func DeserializeChunk(b []byte) *Chunk {
 	for x := range c.Tiles {
 		for y := range c.Tiles[x] {
 			c.Tiles[x][y] = tiles[int(binary.LittleEndian.Uint16(b[byteIndex:byteIndex+2]))]
+			c.Tiles[x][y].Chunk = c
 			byteIndex += 2
 		}
 	}

@@ -151,6 +151,8 @@ func (c *Chunk) Generate() {
 			} else {
 				c.Tiles[x][y] = tiles[tileGrass]
 			}
+
+			c.Tiles[x][y].Chunk = c
 		}
 	}
 
@@ -174,7 +176,7 @@ func (c *Chunk) GenerateBoundaryTiles() {
 		bottomRightChunk *Chunk
 		bottomLeftChunk  *Chunk
 
-		thisTile              *Tile
+		// thisTile              *Tile
 		leftTile              *Tile
 		rightTile             *Tile
 		topTile               *Tile
@@ -221,7 +223,7 @@ func (c *Chunk) GenerateBoundaryTiles() {
 
 	for x, col := range c.Tiles {
 		for y, _ := range col {
-			thisTile = &c.Tiles[x][y]
+			// thisTile = &c.Tiles[x][y]
 			if x == 0 {
 				// This Tile is along the left edge
 				if hasLeftChunk {
@@ -361,80 +363,19 @@ func (c *Chunk) GenerateBoundaryTiles() {
 				bottomTile = &c.Tiles[x][y-1]
 			}
 
-			c.Tiles[x][y] = c.decideTileType(thisTile, leftTile, rightTile, topTile, bottomTile, topLeftCornerTile, topRightCornerTile, bottomLeftCornerTile, bottomRightCornerTile)
+			c.Tiles[x][y].LeftNeighbor = leftTile
+			c.Tiles[x][y].RightNeighbor = rightTile
+			c.Tiles[x][y].TopNeighbor = topTile
+			c.Tiles[x][y].BottomNeighbor = bottomTile
+			c.Tiles[x][y].TopLeftNeighbor = topLeftCornerTile
+			c.Tiles[x][y].TopRightNeighbor = topRightCornerTile
+			c.Tiles[x][y].BottomLeftNeighbor = bottomRightCornerTile
+			c.Tiles[x][y].BottomRightNeighbor = bottomLeftCornerTile
+
+			c.Tiles[x][y].DecideTileType()
 		}
 	}
 
-}
-
-func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTile,
-	topLeftCornerTile, topRightCornerTile, bottomLeftCornerTile, bottomRightCornerTile *Tile) Tile {
-	// return *thisTile
-	if thisTile.Id == tileWater {
-		// We compare using displayName rather than Id because variants of the same kind of Tile
-		// ("grassLeftSide", "grassTopRightCorner", etc) will all have the same displayName ("grass")
-
-		if leftTile != nil && leftTile.DisplayName == "grass" && !leftTile.IsBorderTile {
-			if topTile != nil && topTile.DisplayName == "grass" {
-				// We're at the top left corner of a body of water
-				return tiles[tileWaterTopLeftCorner]
-			}
-			if bottomTile != nil && bottomTile.DisplayName == "grass" {
-				// We're at the bottom left corner of a body of water
-				return tiles[tileWaterBottomLeftCorner]
-			}
-
-			// We're on the left side of a body of water
-			return tiles[tileWaterLeftSide]
-		}
-
-		if rightTile != nil && rightTile.DisplayName == "grass" && !rightTile.IsCornerTile {
-			if topTile != nil && topTile.DisplayName == "grass" {
-				// We're at the top right corner of a body of water
-				return tiles[tileWaterTopRightCorner]
-			}
-			if bottomTile != nil && bottomTile.DisplayName == "grass" {
-				// We're at the top right corner of a body of water
-				return tiles[tileWaterBottomRightCorner]
-			}
-
-			// We're on the right side of a body of water.
-			return tiles[tileWaterRightSide]
-		}
-
-		if topTile != nil && topTile.DisplayName == "grass" && !topTile.IsBorderTile {
-			// We're on the top side of a body of water.
-			return tiles[tileWaterTopSide]
-		}
-
-		if bottomTile != nil && bottomTile.DisplayName == "grass" && !bottomTile.IsBorderTile {
-			// We're on the bottom side of a body of water.
-			return tiles[tileWaterBottomSide]
-		}
-
-		if topRightCornerTile != nil && topRightCornerTile.DisplayName == "grass" && !topRightCornerTile.IsBorderTile {
-			// There's grass at the top right, use the speck Tile so we don't break the coastline
-			return tiles[tileGrassTopRightWaterCorner]
-		}
-		if topLeftCornerTile != nil && topLeftCornerTile.DisplayName == "grass" && !topLeftCornerTile.IsBorderTile {
-			// There's grass at the top left, use the speck Tile so we don't break the coastline
-			return tiles[tileGrassTopLeftWaterCorner]
-		}
-		if bottomRightCornerTile != nil && bottomRightCornerTile.DisplayName == "grass" && !bottomRightCornerTile.IsBorderTile {
-			// There's grass at the bottom right, use the speck Tile so we don't break the coastline
-			return tiles[tileGrassBottomRightWaterCorner]
-		}
-		if bottomLeftCornerTile != nil && bottomLeftCornerTile.DisplayName == "grass" && !bottomLeftCornerTile.IsBorderTile {
-			// There's grass at the bottom left, use the speck Tile so we don't break the coastline
-			return tiles[tileGrassBottomLeftWaterCorner]
-		}
-
-		// We're not on any edge, just floating at sea <3
-		return tiles[tileWater]
-	}
-
-	// Right now we only add water boundary Tiles.
-	return *thisTile
 }
 
 func (c *Chunk) PersistToDisk() {
