@@ -79,7 +79,22 @@ func InitTiles() {
 }
 
 func (t *Tile) DecideTileType() {
+}
 
+func (t *Tile) IsLeftEdge() bool {
+	return t.LeftNeighbor != nil && t.LeftNeighbor.DisplayName != t.DisplayName
+}
+
+func (t *Tile) IsRightEdge() bool {
+	return t.RightNeighbor != nil && t.RightNeighbor.DisplayName != t.DisplayName
+}
+
+func (t *Tile) IsTopEdge() bool {
+	return t.TopNeighbor != nil && t.TopNeighbor.DisplayName != t.DisplayName
+}
+
+func (t *Tile) IsBottomEdge() bool {
+	return t.BottomNeighbor != nil && t.BottomNeighbor.DisplayName != t.DisplayName
 }
 
 // func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTile,
