@@ -21,6 +21,7 @@ type GameServiceClient interface {
 	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (GameService_ConnectClient, error)
 	SendPlayerUpdates(ctx context.Context, opts ...grpc.CallOption) (GameService_SendPlayerUpdatesClient, error)
 	LoadChunk(ctx context.Context, in *Vector, opts ...grpc.CallOption) (*Chunk, error)
+	UpdateTile(ctx context.Context, in *TileUpdate, opts ...grpc.CallOption) (*Ack, error)
 }
 
 type gameServiceClient struct {
@@ -106,6 +107,15 @@ func (c *gameServiceClient) LoadChunk(ctx context.Context, in *Vector, opts ...g
 	return out, nil
 }
 
+func (c *gameServiceClient) UpdateTile(ctx context.Context, in *TileUpdate, opts ...grpc.CallOption) (*Ack, error) {
+	out := new(Ack)
+	err := c.cc.Invoke(ctx, "/pb.GameService/UpdateTile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GameServiceServer is the server API for GameService service.
 // All implementations must embed UnimplementedGameServiceServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type GameServiceServer interface {
 	Connect(*ConnectRequest, GameService_ConnectServer) error
 	SendPlayerUpdates(GameService_SendPlayerUpdatesServer) error
 	LoadChunk(context.Context, *Vector) (*Chunk, error)
+	UpdateTile(context.Context, *TileUpdate) (*Ack, error)
 	mustEmbedUnimplementedGameServiceServer()
 }
 
@@ -128,6 +139,9 @@ func (UnimplementedGameServiceServer) SendPlayerUpdates(GameService_SendPlayerUp
 }
 func (UnimplementedGameServiceServer) LoadChunk(context.Context, *Vector) (*Chunk, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method LoadChunk not implemented")
+}
+func (UnimplementedGameServiceServer) UpdateTile(context.Context, *TileUpdate) (*Ack, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTile not implemented")
 }
 func (UnimplementedGameServiceServer) mustEmbedUnimplementedGameServiceServer() {}
 
@@ -207,6 +221,24 @@ func _GameService_LoadChunk_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GameService_UpdateTile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TileUpdate)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameServiceServer).UpdateTile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.GameService/UpdateTile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameServiceServer).UpdateTile(ctx, req.(*TileUpdate))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GameService_ServiceDesc is the grpc.ServiceDesc for GameService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -217,6 +249,10 @@ var GameService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "LoadChunk",
 			Handler:    _GameService_LoadChunk_Handler,
+		},
+		{
+			MethodName: "UpdateTile",
+			Handler:    _GameService_UpdateTile_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
