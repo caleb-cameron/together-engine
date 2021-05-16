@@ -384,6 +384,14 @@ func (c *Chunk) ToggleTile(worldPos pixel.Vec) {
 	tileX := int(tileOffset.X) / TileSize
 	tileY := int(tileOffset.Y) / TileSize
 
+	if tileX < 0 {
+		tileX += ChunkSize
+	}
+
+	if tileY < 0 {
+		tileY += ChunkSize
+	}
+
 	if tileX >= ChunkSize || tileY >= ChunkSize {
 		// Invalid tile
 		return
