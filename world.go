@@ -316,8 +316,8 @@ func (w *World) GamePosToChunkAndTilePos(pos pixel.Vec) (int, int, int, int) {
 	tileX := int(pos.X) / ChunkSize % TileSize
 	tileY := int(pos.Y) / ChunkSize % TileSize
 
-	chunkX := (int(pos.X) - (ChunkSize / 2)) / ChunkSize / TileSize
-	chunkY := (int(pos.Y) - (ChunkSize / 2)) / ChunkSize / TileSize
+	chunkX := (int(pos.X) - ChunkSize/2) / ChunkSize / TileSize
+	chunkY := (int(pos.Y) - ChunkSize/2) / ChunkSize / TileSize
 
 	if tileX < 0 {
 		chunkX -= 1
