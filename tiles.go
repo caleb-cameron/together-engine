@@ -47,10 +47,10 @@ type Tile struct {
 	Chunk               *Chunk
 }
 
-var tiles map[int]Tile
+var Tiles map[int]Tile
 
 func InitTiles() {
-	tiles = map[int]Tile{
+	Tiles = map[int]Tile{
 		TileGrass:                       {Id: TileGrass, Name: "grass", DisplayName: "grass", Sprite: "grass", Visible: true},
 		TileGrassTopLeftCorner:          {Id: TileGrassTopLeftCorner, Name: "grassTopLeftCorner", DisplayName: "grass", Sprite: "grassTopLeftCorner", Visible: true},
 		TileGrassTopRightCorner:         {Id: TileGrassTopRightCorner, Name: "grassTopRightCorner", DisplayName: "grass", Sprite: "grassTopRightCorner", Visible: true},

@@ -147,9 +147,9 @@ func (c *Chunk) Generate() {
 			//fmt.Printf("tileHeight: %d\n", tileHeight)
 			//fmt.Println(altitudeNoise)
 			if tileHeight < 5 {
-				c.Tiles[x][y] = tiles[TileWater]
+				c.Tiles[x][y] = Tiles[TileWater]
 			} else {
-				c.Tiles[x][y] = tiles[TileGrass]
+				c.Tiles[x][y] = Tiles[TileGrass]
 			}
 
 			c.Tiles[x][y].Chunk = c
