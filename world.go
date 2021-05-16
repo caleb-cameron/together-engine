@@ -314,9 +314,6 @@ func (w *World) GetChunk(x, y int) *Chunk {
 }
 
 func (w *World) GamePosToChunkAndTilePos(pos pixel.Vec) (int, int, int, int) {
-	pos.X += float64(TileSize / 2)
-	pos.Y += float64(TileSize / 2)
-
 	tileXOffset := pos.X / float64(TileSize)
 	tileYOffset := pos.Y / float64(TileSize)
 
