@@ -373,12 +373,12 @@ func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTil
 		// We compare using displayName rather than Id because variants of the same kind of Tile
 		// ("grassLeftSide", "grassTopRightCorner", etc) will all have the same displayName ("grass")
 
-		if leftTile != nil && leftTile.displayName == "grass" {
-			if topTile != nil && topTile.displayName == "grass" {
+		if leftTile != nil && leftTile.DisplayName == "grass" {
+			if topTile != nil && topTile.DisplayName == "grass" {
 				// We're at the top left corner of a body of water
 				return tiles[tileWaterTopLeftCorner]
 			}
-			if bottomTile != nil && bottomTile.displayName == "grass" {
+			if bottomTile != nil && bottomTile.DisplayName == "grass" {
 				// We're at the bottom left corner of a body of water
 				return tiles[tileWaterBottomLeftCorner]
 			}
@@ -387,12 +387,12 @@ func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTil
 			return tiles[tileWaterLeftSide]
 		}
 
-		if rightTile != nil && rightTile.displayName == "grass" {
-			if topTile != nil && topTile.displayName == "grass" {
+		if rightTile != nil && rightTile.DisplayName == "grass" {
+			if topTile != nil && topTile.DisplayName == "grass" {
 				// We're at the top right corner of a body of water
 				return tiles[tileWaterTopRightCorner]
 			}
-			if bottomTile != nil && bottomTile.displayName == "grass" {
+			if bottomTile != nil && bottomTile.DisplayName == "grass" {
 				// We're at the top right corner of a body of water
 				return tiles[tileWaterBottomRightCorner]
 			}
@@ -401,29 +401,29 @@ func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTil
 			return tiles[tileWaterRightSide]
 		}
 
-		if topTile != nil && topTile.displayName == "grass" {
+		if topTile != nil && topTile.DisplayName == "grass" {
 			// We're on the top side of a body of water.
 			return tiles[tileWaterTopSide]
 		}
 
-		if bottomTile != nil && bottomTile.displayName == "grass" {
+		if bottomTile != nil && bottomTile.DisplayName == "grass" {
 			// We're on the bottom side of a body of water.
 			return tiles[tileWaterBottomSide]
 		}
 
-		if topRightCornerTile != nil && topRightCornerTile.displayName == "grass" {
+		if topRightCornerTile != nil && topRightCornerTile.DisplayName == "grass" {
 			// There's grass at the top right, use the speck Tile so we don't break the coastline
 			return tiles[tileWaterTopRightSpeck]
 		}
-		if topLeftCornerTile != nil && topLeftCornerTile.displayName == "grass" {
+		if topLeftCornerTile != nil && topLeftCornerTile.DisplayName == "grass" {
 			// There's grass at the top left, use the speck Tile so we don't break the coastline
 			return tiles[tileWaterTopLeftSpeck]
 		}
-		if bottomRightCornerTile != nil && bottomRightCornerTile.displayName == "grass" {
+		if bottomRightCornerTile != nil && bottomRightCornerTile.DisplayName == "grass" {
 			// There's grass at the bottom right, use the speck Tile so we don't break the coastline
 			return tiles[tileWaterBottomRightSpeck]
 		}
-		if bottomLeftCornerTile != nil && bottomLeftCornerTile.displayName == "grass" {
+		if bottomLeftCornerTile != nil && bottomLeftCornerTile.DisplayName == "grass" {
 			// There's grass at the bottom left, use the speck Tile so we don't break the coastline
 			return tiles[tileWaterBottomLeftSpeck]
 		}
