@@ -381,8 +381,8 @@ func (c *Chunk) GenerateBoundaryTiles() {
 func (c *Chunk) ToggleTile(worldPos pixel.Vec) {
 	tileOffset := worldPos.Sub(c.Bounds.Min)
 
-	tileX := int(tileOffset.X) / TileSize
-	tileY := int(tileOffset.Y) / TileSize
+	tileX := int(tileOffset.X / float64(TileSize))
+	tileY := int(tileOffset.Y / float64(TileSize))
 
 	if tileX < 0 {
 		tileX += ChunkSize
