@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"sync"
@@ -313,19 +314,26 @@ func (w *World) GetChunk(x, y int) *Chunk {
 }
 
 func (w *World) GamePosToChunkAndTilePos(pos pixel.Vec) (int, int, int, int) {
-	tileX := int(pos.X) / ChunkSize % TileSize
-	tileY := int(pos.Y) / ChunkSize % TileSize
+	pos.X += float64(TileSize / 2)
+	pos.Y += float64(TileSize / 2)
 
-	chunkX := (int(pos.X) - ChunkSize/2) / ChunkSize / TileSize
-	chunkY := (int(pos.Y) - ChunkSize/2) / ChunkSize / TileSize
+	tileXOffset := pos.X / float64(TileSize)
+	tileYOffset := pos.Y / float64(TileSize)
+
+	chunkXOffset := tileXOffset / float64(ChunkSize)
+	chunkYOffset := tileYOffset / float64(ChunkSize)
+
+	chunkX := int(math.Floor(chunkXOffset))
+	chunkY := int(math.Floor(chunkYOffset))
+
+	tileX := int(math.Floor(tileXOffset)) % ChunkSize
+	tileY := int(math.Floor(tileYOffset)) % ChunkSize
 
 	if tileX < 0 {
-		chunkX -= 1
 		tileX += ChunkSize
 	}
 
 	if tileY < 0 {
-		chunkY -= 1
 		tileY += ChunkSize
 	}
 
