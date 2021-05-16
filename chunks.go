@@ -378,6 +378,22 @@ func (c *Chunk) GenerateBoundaryTiles() {
 
 }
 
+func (c *Chunk) ToggleTile(x, y int) {
+	tileX := x/ChunkSize/TileSize - int(c.Bounds.Min.X)
+	tileY := y/ChunkSize/TileSize - int(c.Bounds.Min.Y)
+
+	c.Lock()
+	defer c.Unlock()
+
+	tile := &c.Tiles[tileX][tileY]
+
+	if tile.DisplayName == "grass" {
+		c.Tiles[tileX][tileY] = tiles[tileWater]
+	} else if tile.DisplayName == "water" {
+		c.Tiles[tileX][tileY] = tiles[tileGrass]
+	}
+}
+
 func (c *Chunk) PersistToDisk() {
 	c.mutex.RLock()
 	defer c.mutex.RUnlock()
