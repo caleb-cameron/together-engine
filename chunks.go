@@ -414,19 +414,19 @@ func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTil
 
 		if topRightCornerTile != nil && topRightCornerTile.DisplayName == "grass" {
 			// There's grass at the top right, use the speck Tile so we don't break the coastline
-			return tiles[tileWaterTopRightSpeck]
+			return tiles[tileGrassTopRightWaterCorner]
 		}
 		if topLeftCornerTile != nil && topLeftCornerTile.DisplayName == "grass" {
 			// There's grass at the top left, use the speck Tile so we don't break the coastline
-			return tiles[tileWaterTopLeftSpeck]
+			return tiles[tileGrassTopLeftWaterCorner]
 		}
 		if bottomRightCornerTile != nil && bottomRightCornerTile.DisplayName == "grass" {
 			// There's grass at the bottom right, use the speck Tile so we don't break the coastline
-			return tiles[tileWaterBottomRightSpeck]
+			return tiles[tileGrassBottomRightWaterCorner]
 		}
 		if bottomLeftCornerTile != nil && bottomLeftCornerTile.DisplayName == "grass" {
 			// There's grass at the bottom left, use the speck Tile so we don't break the coastline
-			return tiles[tileWaterBottomLeftSpeck]
+			return tiles[tileGrassBottomLeftWaterCorner]
 		}
 
 		// We're not on any edge, just floating at sea <3
