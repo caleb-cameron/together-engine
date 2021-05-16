@@ -43,8 +43,9 @@ message Chunk {
 }
 
 message TileUpdate {
-  Vector Coordinates = 1;
-  bytes TileData = 2;
+  Vector ChunkCoordinates = 1;
+  Vector TileCoordinates = 2;
+  bytes TileData = 3;
 }
 
 service GameService {
