@@ -379,8 +379,21 @@ func (c *Chunk) GenerateBoundaryTiles() {
 }
 
 func (c *Chunk) ToggleTile(x, y int) {
-	tileX := x/ChunkSize/TileSize - int(c.Bounds.Min.X)
-	tileY := y/ChunkSize/TileSize - int(c.Bounds.Min.Y)
+	tileX := x / ChunkSize / TileSize
+	tileY := y / ChunkSize / TileSize
+
+	if tileX < 0 {
+		tileX = ChunkSize + tileX
+	}
+
+	if tileY < 0 {
+		tileY = ChunkSize + tileY
+	}
+
+	if tileX >= ChunkSize || tileY >= ChunkSize {
+		// Invalid tile
+		return
+	}
 
 	c.Lock()
 	defer c.Unlock()
