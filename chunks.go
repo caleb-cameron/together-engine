@@ -364,6 +364,7 @@ func (c *Chunk) GenerateBoundaryTiles() {
 			c.Tiles[x][y] = c.decideTileType(thisTile, leftTile, rightTile, topTile, bottomTile, topLeftCornerTile, topRightCornerTile, bottomLeftCornerTile, bottomRightCornerTile)
 		}
 	}
+
 }
 
 func (c *Chunk) decideTileType(thisTile, leftTile, rightTile, topTile, bottomTile,

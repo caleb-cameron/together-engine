@@ -84,6 +84,17 @@ func (w *World) CreateChunk(x, y int) {
 	c.GenerateBoundaryTiles()
 	c.PersistToDisk()
 
+	// Regenerate boundary tiles for neighbor chunks now that this one is created.
+	neighborChunks := c.GetNeighborChunkPositions()
+
+	for _, pos := range neighborChunks {
+		n := GWorld.GetChunk(int(pos.X), int(pos.Y))
+
+		if n != nil {
+			n.GenerateBoundaryTiles()
+		}
+	}
+
 	w.UpdateMutex.Lock()
 	if _, ok := w.Chunks[x]; !ok {
 		w.Chunks[x] = make(map[int]*Chunk, 10)
