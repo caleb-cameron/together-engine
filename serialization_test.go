@@ -28,7 +28,7 @@ func TestSerializeChunk(t *testing.T) {
 
 	c1 := GWorld.Chunks[0][0]
 
-	serialized := SerializeChunk(*c1)
+	serialized := SerializeChunk(c1)
 
 	c2 := DeserializeChunk(serialized)
 

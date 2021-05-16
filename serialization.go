@@ -17,6 +17,16 @@ import (
 	tile ids (1 uint16 * width * height)
 */
 
+func SerializeTile(tile Tile) []byte {
+	out := make([]byte, 2)
+	binary.LittleEndian.PutUint16(out, uint16(tile.Id))
+	return out
+}
+
+func DeserializeTile(b []byte) Tile {
+	return Tiles[int(binary.LittleEndian.Uint16(b))]
+}
+
 func SerializeChunk(c *Chunk) []byte {
 	w := uint16(c.Bounds.W())
 	h := uint16(c.Bounds.H())
@@ -39,7 +49,7 @@ func SerializeChunk(c *Chunk) []byte {
 
 	for _, col := range c.Tiles {
 		for _, tile := range col {
-			binary.LittleEndian.PutUint16(curVal, uint16(tile.Id))
+			curVal = SerializeTile(tile)
 			out[byteIndex] = curVal[0]
 			out[byteIndex+1] = curVal[1]
 			byteIndex += 2
@@ -58,7 +68,7 @@ func DeserializeChunk(b []byte) *Chunk {
 	byteIndex := 4
 	for x := range c.Tiles {
 		for y := range c.Tiles[x] {
-			c.Tiles[x][y] = Tiles[int(binary.LittleEndian.Uint16(b[byteIndex:byteIndex+2]))]
+			c.Tiles[x][y] = DeserializeTile(b[byteIndex : byteIndex+2])
 			c.Tiles[x][y].Chunk = c
 			byteIndex += 2
 		}
