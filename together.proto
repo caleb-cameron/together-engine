@@ -6,7 +6,7 @@ package pb;
 message Ack {}
 
 message ConnectRequest {
-  string Username = 1;
+  string Token = 2;
 }
 
 /*
@@ -27,8 +27,9 @@ message UserLogin {
 message LoginResponse {
   string Username = 1;
   string Email = 2;
-  bool Success = 3;
-  string Error = 4;
+  string Token = 3;
+  bool Success = 4;
+  string Error = 5;
 }
 /*
     Game state stuff
