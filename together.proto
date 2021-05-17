@@ -9,6 +9,31 @@ message ConnectRequest {
   string Username = 1;
 }
 
+/*
+    User account stuff
+*/
+
+message UserRegistration {
+  string Username = 1;
+  string Email = 2;
+  string Password = 3;
+}
+
+message UserLogin {
+  string Username = 1;
+  string Password = 2;
+}
+
+message LoginResponse {
+  string Username = 1;
+  string Email = 2;
+  bool Success = 3;
+  string Error = 4;
+}
+/*
+    Game state stuff
+*/
+
 message Vector {
   float X = 1;
   float Y = 2;
@@ -48,9 +73,15 @@ message TileUpdate {
   bytes TileData = 3;
 }
 
+/*
+    Service/RPC defs
+*/
+
 service GameService {
   rpc Connect(ConnectRequest) returns (stream GameState);
   rpc SendPlayerUpdates(stream PlayerEvent) returns (Ack);
   rpc LoadChunk(Vector) returns (Chunk);
   rpc UpdateTile(TileUpdate) returns (Ack);
+  rpc Register(UserRegistration) returns (LoginResponse);
+  rpc Login(UserLogin) returns (LoginResponse);
 }

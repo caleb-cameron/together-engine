@@ -22,6 +22,8 @@ type GameServiceClient interface {
 	SendPlayerUpdates(ctx context.Context, opts ...grpc.CallOption) (GameService_SendPlayerUpdatesClient, error)
 	LoadChunk(ctx context.Context, in *Vector, opts ...grpc.CallOption) (*Chunk, error)
 	UpdateTile(ctx context.Context, in *TileUpdate, opts ...grpc.CallOption) (*Ack, error)
+	Register(ctx context.Context, in *UserRegistration, opts ...grpc.CallOption) (*LoginResponse, error)
+	Login(ctx context.Context, in *UserLogin, opts ...grpc.CallOption) (*LoginResponse, error)
 }
 
 type gameServiceClient struct {
@@ -116,6 +118,24 @@ func (c *gameServiceClient) UpdateTile(ctx context.Context, in *TileUpdate, opts
 	return out, nil
 }
 
+func (c *gameServiceClient) Register(ctx context.Context, in *UserRegistration, opts ...grpc.CallOption) (*LoginResponse, error) {
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, "/pb.GameService/Register", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *gameServiceClient) Login(ctx context.Context, in *UserLogin, opts ...grpc.CallOption) (*LoginResponse, error) {
+	out := new(LoginResponse)
+	err := c.cc.Invoke(ctx, "/pb.GameService/Login", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GameServiceServer is the server API for GameService service.
 // All implementations must embed UnimplementedGameServiceServer
 // for forward compatibility
@@ -124,6 +144,8 @@ type GameServiceServer interface {
 	SendPlayerUpdates(GameService_SendPlayerUpdatesServer) error
 	LoadChunk(context.Context, *Vector) (*Chunk, error)
 	UpdateTile(context.Context, *TileUpdate) (*Ack, error)
+	Register(context.Context, *UserRegistration) (*LoginResponse, error)
+	Login(context.Context, *UserLogin) (*LoginResponse, error)
 	mustEmbedUnimplementedGameServiceServer()
 }
 
@@ -142,6 +164,12 @@ func (UnimplementedGameServiceServer) LoadChunk(context.Context, *Vector) (*Chun
 }
 func (UnimplementedGameServiceServer) UpdateTile(context.Context, *TileUpdate) (*Ack, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateTile not implemented")
+}
+func (UnimplementedGameServiceServer) Register(context.Context, *UserRegistration) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
+}
+func (UnimplementedGameServiceServer) Login(context.Context, *UserLogin) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
 func (UnimplementedGameServiceServer) mustEmbedUnimplementedGameServiceServer() {}
 
@@ -239,6 +267,42 @@ func _GameService_UpdateTile_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GameService_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserRegistration)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameServiceServer).Register(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.GameService/Register",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameServiceServer).Register(ctx, req.(*UserRegistration))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _GameService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserLogin)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameServiceServer).Login(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.GameService/Login",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameServiceServer).Login(ctx, req.(*UserLogin))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GameService_ServiceDesc is the grpc.ServiceDesc for GameService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -253,6 +317,14 @@ var GameService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateTile",
 			Handler:    _GameService_UpdateTile_Handler,
+		},
+		{
+			MethodName: "Register",
+			Handler:    _GameService_Register_Handler,
+		},
+		{
+			MethodName: "Login",
+			Handler:    _GameService_Login_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
