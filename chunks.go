@@ -7,6 +7,8 @@ import (
 	"os"
 	"sync"
 
+	quadtree "github.com/JamesLMilner/quadtree-go"
+
 	perlin "github.com/aquilax/go-perlin"
 	"github.com/faiface/pixel"
 )
@@ -17,6 +19,7 @@ type Chunk struct {
 	Generated bool
 	changed   bool
 	mutex     sync.RWMutex
+	Quadtree  *quadtree.Quadtree
 }
 
 var Noise *perlin.Perlin
@@ -31,6 +34,19 @@ func NewChunk(bounds pixel.Rect) *Chunk {
 		Bounds: bounds,
 		Tiles:  columns,
 		mutex:  sync.RWMutex{},
+		Quadtree: &quadtree.Quadtree{
+			Bounds: quadtree.Bounds{
+				X:      bounds.Min.X,
+				Y:      bounds.Min.Y,
+				Width:  bounds.W(),
+				Height: bounds.H(),
+			},
+			MaxObjects: EntityQuadtreeMaxLevels,
+			MaxLevels:  EntityQuadtreeMaxObjectsPerNode,
+			Level:      0,
+			Objects:    make([]quadtree.Bounds, 0),
+			Nodes:      make([]quadtree.Quadtree, 0),
+		},
 	}
 }
 
