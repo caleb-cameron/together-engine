@@ -1,4 +1,4 @@
-module github.com/abeardevil/together-engine
+module github.com/caleb-cameron/together-engine
 
 go 1.15
 

@@ -3,7 +3,7 @@ package engine
 import (
 	"sync"
 
-	"github.com/abeardevil/together-engine/pb"
+	"github.com/caleb-cameron/together-engine/pb"
 	"github.com/faiface/pixel"
 )
 
