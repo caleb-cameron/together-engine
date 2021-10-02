@@ -1,17 +1,19 @@
 module github.com/caleb-cameron/together-engine
 
-go 1.15
+go 1.17
 
 require (
 	github.com/JamesLMilner/quadtree-go v0.0.0-20191212211504-d12870ffe403
-	github.com/aquilax/go-perlin v1.0.0
+	github.com/aquilax/go-perlin v1.1.0
 	github.com/faiface/pixel v0.10.0
-	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
-	golang.org/x/image v0.0.0-20210504121937-7319ad40d33e
-	golang.org/x/net v0.0.0-20210510120150-4163338589ed // indirect
-	golang.org/x/sys v0.0.0-20210514084401-e8d321eab015 // indirect
-	google.golang.org/genproto v0.0.0-20210517163617-5e0236093d7a // indirect
-	google.golang.org/grpc v1.37.1
-	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0 // indirect
-	google.golang.org/protobuf v1.26.0
+	google.golang.org/grpc v1.41.0
+	google.golang.org/protobuf v1.27.1
+)
+
+require (
+	github.com/golang/protobuf v1.5.0 // indirect
+	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
+	golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd // indirect
+	golang.org/x/text v0.3.0 // indirect
+	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
 )
