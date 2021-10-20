@@ -6,6 +6,7 @@ package pb;
 message Ack {}
 
 message ConnectRequest {
+  string Username = 1;
   string Token = 2;
 }
 
